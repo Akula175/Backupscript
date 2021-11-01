@@ -18,4 +18,4 @@
 
 ## Remote; script should be able to back up via SSH remotely.
 
-## Encryption; script should support encryption
+## Encryption; script should support encryption.
