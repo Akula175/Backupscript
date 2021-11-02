@@ -13,7 +13,6 @@ LDIR=/home/$USER/backup
 # Checks if backup Directory exists, otherwise it gets created (silent)
 
 if [ ! -d "/home/$USER/backup" ]; then
-    echo "Does not exist, creating..."
     mkdir /home/$USER/backup
 fi
 
