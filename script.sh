@@ -5,6 +5,18 @@
 echo "What do you want to back up?: "
 read -r VAL
 
+# Variabel för backupmapp
+
+whoami=USER
+LDIR=/home/$USER/backup
+
+# Checks if backup Directory exists, otherwise it gets created (silent)
+
+if [ ! -d "/home/$USER/backup" ]; then
+    echo "Does not exist, creating..."
+    mkdir /home/$USER/backup
+fi
+
 # Checks if input is a working Directory
 # If valid Dir, begins tar
 
@@ -22,8 +34,8 @@ fi
 else
   if [[ $VAL =~ [Aa-Zz]+[@]+[0-9] ]]; then
     echo "Entered IP address"
-    echo "Input Remote DIR and local DIR: "
-    read -r RDIR LDIR
+    echo "Input Remote DIR: "
+    read -r RDIR
     scp $VAL:$RDIR $LDIR
     
   else 
