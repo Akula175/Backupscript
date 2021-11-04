@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## Function to archive and compress directories
+## Function to archive and compress directories with tar and gzip.
 ## Add your directories to the variable source or change the variable to suite your script.
 
 tarFunction() {
