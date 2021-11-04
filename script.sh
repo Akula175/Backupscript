@@ -23,10 +23,10 @@ fi
 
 if [[ $1 =~ [/][a-z] ]] && [[ ! $1 =~ [0-9] ]]; then
   if [ -d "$1" ]; then
-    echo "Input is valid Dir, creating backup..."
+    echo "Input is valid Directory, creating backup..."
     #tar ....
   else
-    echo "Input is not a working Dir"
+    echo "$1 is not a working Directory" && exit 1
 fi
 
 # Checks if input is an IP addr
@@ -34,11 +34,11 @@ fi
 
 else
   if [[ $1 =~ [a-z]@[0-9] ]]; then
-    echo "Entered IP address"
+    echo "Entered IP address, starting scp"
     scp -r -i $KEY $1:$2 $LDIR
     
     else 
-    echo "Please input IP addr or working DIR"
+    echo "Please input IP addr or working DIR" && exit 1
   
   fi 
 
