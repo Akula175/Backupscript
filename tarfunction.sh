@@ -3,9 +3,9 @@
 ## Function to archive and compress directories
 ## Add your directories to the variable source or change the variable to suite your script.
 
-tarFunction(){
+tarFunction() {
 
-source=    					    # Example $HOME/mystuff/&&/$Home/morestuff
+source=    					# Example $HOME/mystuff/
 destination=   					# Example $HOME/
 filename=     					# Example "backup.tar.gz"
 backup=$destination$filename
