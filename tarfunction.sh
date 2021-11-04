@@ -6,9 +6,21 @@
 tarFunction() {
 
 source=    					# Example $HOME/mystuff/
-destination=   					# Example $HOME/
+destination=  					# Example $HOME/
 filename=     					# Example "backup.tar.gz"
 backup=$destination$filename
+
+
+## Check if the source and destination directories exists otherwise exit.
+if [[ ! -d $source ]]; then
+    echo "$source doesn't exist" && exit 1
+fi
+
+if [[ ! -d $destination ]]; then
+    echo "$destination doesn't exist" && exit 1
+fi
+
+# Create a backup if the backup file doesn't already exist.
 
 if [[ -f $backup ]]; then
 	echo "The file $backup already exists...exiting"
