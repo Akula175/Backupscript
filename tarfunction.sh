@@ -7,8 +7,8 @@ tarFunction() {
 
 source=    					# Example $HOME/mystuff/
 destination=   					# Example $HOME/
-filename=     					# Example "backup.tar.gz"
-backup=$destination$filename
+filename=     					# Example "archive.tar.gz"
+archive=$destination$filename
 
 
 ## Check if the source and destination directories exists otherwise exit.
@@ -25,23 +25,23 @@ else
     exit 0
 fi
 
-# Create a backup if the backup file doesn't already exist.
+# Create an archive if the archive doesn't already exist.
 
-if [[ -f $backup ]]; then
-	echo "The file $backup already exists...exiting"
+if [[ -f $archive ]]; then
+	echo "The file $archive already exists...exiting"
 	exit 1
 
 else
-	tar -czf $backup $source >/dev/null 2>&1 && (command sha512sum $backup > $backup.CHECKSUM)
+	tar -czf $archive $source >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
 
 fi
 
 ## Check if CHECKSUM is correct
 
-if [[ -f $backup.CHECKSUM ]]; then
-	command sha512sum -c $backup.CHECKSUM
+if [[ -f $archive.CHECKSUM ]]; then
+	command sha512sum -c $archive.CHECKSUM
 
 else
-	echo "backup file and checksum file doesn't match" && exit 1
+	echo "The archive file and checksum file doesn't match" && exit 1
 fi
 }
