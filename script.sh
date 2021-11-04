@@ -11,6 +11,7 @@ LDIR=$HOME/backup
 
 KEY=~/.ssh/id_rsa.pub
 
+
 # Checks if backup Directory exists, otherwise it gets created (silent)
 
 if [ ! -d $LDIR ]; then
