@@ -25,6 +25,6 @@ if [[ -f $backup.CHECKSUM ]]; then
 	command sha512sum -c $backup.CHECKSUM
 
 else
-	echo "backup and checksum doesn't match" && exit 1
+	echo "backup file and checksum file doesn't match" && exit 1
 fi
 }
