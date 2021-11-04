@@ -5,9 +5,9 @@
 
 tarFunction() {
 
-source=    					# Example $HOME/mystuff/
-destination=   					# Example $HOME/
-filename=     					# Example "archive.tar.gz"
+source=$HOME/hey/    					    # Example $HOME/mystuff/
+destination=$HOME/   					# Example $HOME/
+filename=archive.tar.gz     					# Example "archive.tar.gz"
 archive=$destination$filename
 
 
@@ -21,21 +21,18 @@ elif [[ ! -d $source ]]; then
     echo "$source doesn't exist" && exit 1
 elif [[ ! -d $destination ]]; then
     echo "$destination doesn't exist" && exit 1
-else
-    exit 0
 fi
 
-# Create an archive if the archive doesn't already exist.
+# Create an archive if the archive file doesn't already exist.
 
 if [[ -f $archive ]]; then
-	echo "The file $archive already exists...exiting"
-	exit 1
+	echo "The file $archive already exists...exiting" && exit 1
 
 else
 	tar -czf $archive $source >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
 
 fi
-
+echo "hey"
 ## Check if CHECKSUM is correct
 
 if [[ -f $archive.CHECKSUM ]]; then
