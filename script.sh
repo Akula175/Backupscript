@@ -5,20 +5,18 @@
 
 # Variable for local backup folder (hardcoded)
 
-whoami=USER
-LDIR=/home/$USER/backup
+LDIR=$HOME/backup
 
 # Checks if backup Directory exists, otherwise it gets created (silent)
 
-if [ ! -d "/home/$USER/backup" ]; then
-    echo "Does not exist, creating..."
-    mkdir /home/$USER/backup
+if [ ! -d $LDIR ]; then
+    mkdir $LDIR
 fi
 
 # Checks if input is a working Directory
 # If valid Dir, begins tar
 
-if [[ $1 =~ [/][a-z] ]]; then
+if [[ $1 =~ [/][a-z] ]] && [[ ! $1 =~ [0-9] ]]; then
   if [ -d "$1" ]; then
     echo "Input is valid Dir, creating backup..."
     #tar ....
@@ -32,7 +30,7 @@ fi
 else
   if [[ $1 =~ [a-z]@[0-9] ]]; then
     echo "Entered IP address"
-    scp $1:$2 $LDIR
+    scp -r -i ~/.ssh/id_rsa.pub $1:$2 $LDIR
     
     else 
     echo "Please input IP addr or working DIR"
