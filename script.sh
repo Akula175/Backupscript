@@ -3,9 +3,13 @@
 # Reads Input from user using flags in this order:
 # "/local/directory" OR "user@server /remote/directory"
 
-# Variable for local backup folder (hardcoded)
+# Variable for local backup folder. Change this if you want the backup to save in a different location
 
 LDIR=$HOME/backup
+
+# Variable for Key. Change this if your ssh key is in a different location
+
+KEY=~/.ssh/id_rsa.pub
 
 # Checks if backup Directory exists, otherwise it gets created (silent)
 
@@ -30,7 +34,7 @@ fi
 else
   if [[ $1 =~ [a-z]@[0-9] ]]; then
     echo "Entered IP address"
-    scp -r -i ~/.ssh/id_rsa.pub $1:$2 $LDIR
+    scp -r -i $KEY $1:$2 $LDIR
     
     else 
     echo "Please input IP addr or working DIR"
