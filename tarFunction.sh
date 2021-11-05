@@ -5,8 +5,8 @@
 
 tarFunction() {
 
-source=    					    # Example $HOME/mystuff/
-archive=./     					# Example "archive.tar.gz"
+source=                         					    # Example $HOME/mystuff/
+archive=./'backup_'$(date +"%Y-%m-%d_%H%M")'.tar.gz'
 
 
 ## Check if the source directory exist otherwise exit.
@@ -14,7 +14,7 @@ archive=./     					# Example "archive.tar.gz"
 if [[ -z $source ]]; then
     echo "Source directory is empty" && exit 1
 
-else [[ ! -d $source ]]; 
+elif [[ ! -d $source ]]; then
     echo "$source doesn't exist" && exit 1
 fi
 
@@ -37,4 +37,3 @@ else
 	echo "The archive file and checksum file doesn't match" && exit 1
 fi
 }
-
