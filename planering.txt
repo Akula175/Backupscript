@@ -19,3 +19,5 @@
 ## Remote; script should be able to back up via SSH remotely.
 
 ## Encryption; script should support encryption.
+
+## Installation script; create a sepparate script that installs the script in Cron
