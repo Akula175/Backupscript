@@ -11,6 +11,23 @@ LDIR=$HOME/backup
 
 KEY=~/.ssh/id_rsa.pub
 
+# Variable for TEMP location
+
+TEMP=$LDIR/temp
+
+
+# Checks if backup Directory exists, otherwise it gets created (silent)
+# Also checks if temp Directory exists, otherwise this will also get created
+
+if [ ! -d $LDIR ]; then
+    mkdir $LDIR
+if [ ! -d $TEMP ]; then
+    mdir $TEMP 
+    echo "Create"   
+fi
+
+fi
+
 
 
 ## Function to archive and compress directories with tar and gzip.
@@ -47,7 +64,7 @@ tarFunction() {
 
 tarscpFunction() {
 
-    source=$LDIR/$2                     					   
+    source=$TEMP                     					   
     archive="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d_%H%M%S")'.tar.gz'
 
 
@@ -74,12 +91,6 @@ tarscpFunction() {
 }
 
 
-# Checks if backup Directory exists, otherwise it gets created (silent)
-
-if [ ! -d $LDIR ]; then
-    mkdir $LDIR
-fi
-
 # Checks if input is a working Directory
 # If valid Dir, begins tar
 
@@ -92,6 +103,7 @@ fi
 
 if [[ $1 =~ [a-z]@[0-9] ]]; then
     echo "Entered IP address, starting scp"
-    scp -r -i $KEY $1:$2 $LDIR
+    scp -r -i $KEY $1:$2 $TEMP
     tarscpFunction "$2"
+    rm -rf $TEMP/*
 fi
