@@ -94,5 +94,4 @@ if [[ $1 =~ [a-z]@[0-9] ]]; then
     echo "Entered IP address, starting scp"
     scp -r -i $KEY $1:$2 $LDIR
     tarscpFunction "$2"
-    echo $LDIR$2
 fi
