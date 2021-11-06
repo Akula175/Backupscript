@@ -22,8 +22,7 @@ TEMP=$LDIR/temp
 if [ ! -d $LDIR ]; then
     mkdir $LDIR
 if [ ! -d $TEMP ]; then
-    mdir $TEMP 
-    echo "Create"   
+    mdir $TEMP  
 fi
 
 fi
