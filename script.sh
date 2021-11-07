@@ -22,7 +22,7 @@ TEMP=$LDIR/temp
 if [ ! -d $LDIR ]; then
     mkdir $LDIR
 if [ ! -d $TEMP ]; then
-    mdir $TEMP  
+    mdir $TEMP 
 fi
 
 fi
@@ -102,7 +102,7 @@ fi
 
 if [[ $1 =~ [a-z]@[0-9] ]]; then
     echo "Entered IP address, starting scp"
-    scp -r -i $KEY $1:$2 $TEMP
-    tarscpFunction "$2"
+    rsync -zarvh $1:$2 $TEMP
+    tarscpFunction 
     rm -rf $TEMP/*
 fi
