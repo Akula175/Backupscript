@@ -22,7 +22,7 @@ TEMP=/tmp/temp
 if [ ! -d $LDIR ]; then
     mkdir $LDIR
 if [ ! -d $TEMP ]; then
-    mdir $TEMP 
+    mkdir $TEMP 
 fi
 
 fi
