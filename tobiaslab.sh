@@ -13,7 +13,7 @@ KEY=~/.ssh/id_rsa.pub
 
 # Variable for TEMP location
 
-TEMP=/etc/tmp/temp
+TEMP=/tmp/temp
 
 
 # Checks if backup Directory exists, otherwise it gets created (silent)
@@ -94,8 +94,8 @@ tarscpFunction() {
 
 #Checks if the "-e" flag is used
 
-if [[ $1 == "-e" ]]; then
-    ## Insert encrypt here...
+if [[ $1 == "-e" ]]; then 
+    echo "Success"
 fi
 
 # Checks if input is a working Directory

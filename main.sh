@@ -11,6 +11,22 @@ LDIR=$HOME/backup
 
 KEY=~/.ssh/id_rsa.pub
 
+# Variable for TEMP location
+
+TEMP=/tmp/temp
+
+
+# Checks if backup Directory exists, otherwise it gets created (silent)
+# Also checks if temp Directory exists, otherwise this will also get created
+
+if [ ! -d $LDIR ]; then
+    mkdir $LDIR
+if [ ! -d $TEMP ]; then
+    mdir $TEMP 
+fi
+
+fi
+
 
 
 # Function to archive and compress directories with tar and gzip
@@ -23,8 +39,37 @@ tarFunction() {
     archive="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d_%H%M%S")'.tar.gz'
 
 
+    ## Check if the source directory exist otherwise exit.
+    ## if the source directory exist, create the archive.
+
+    if [[ -z $source ]]; then
+        echo "Source directory is empty" && exit 1
+    elif [[ ! -d $source ]]; then
+        echo "$source doesn't exist" && exit 1
+    else
+        tar -cpzf $archive -C $source . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
+    fi
+
+
+    ## Check if CHECKSUM is correct
+
+    if [[ -f $archive.CHECKSUM ]]; then
+        command sha512sum -c $archive.CHECKSUM >/dev/null 2>&1 && echo success || echo failed
+    else
+        echo "The archive file and checksum file doesn't match" && exit 1
+    fi
+
+}
+
+
+tarscpFunction() {
+
+    source=$TEMP                     					   
+    archive="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d_%H%M%S")'.tar.gz'
+
+
     # Check if the source directory exist otherwise exit
-    # If source is not empty, create tar file
+    # if the source directory exist, create the archive
 
     if [[ -z $source ]]; then
         echo "Source directory is empty" && exit 1
@@ -47,10 +92,10 @@ tarFunction() {
 
 
 
-# Checks if backup Directory exists, otherwise it gets created (silent)
+#Checks if the "-e" flag is used
 
-if [ ! -d $LDIR ]; then
-    mkdir $LDIR
+if [[ $1 == "-e" ]]; then 
+    echo "Success"
 fi
 
 # Checks if input is a working Directory
@@ -65,6 +110,7 @@ fi
 
 if [[ $1 =~ [a-z]@[0-9] ]]; then
     echo "Entered IP address, starting scp"
-    scp -r -i $KEY $1:$2 $LDIR
-
+    rsync -zarvh -e "ssh -i $KEY" $1:$2 $TEMP
+    tarscpFunction 
+    rm -rf $TEMP/*
 fi
