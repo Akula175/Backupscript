@@ -91,6 +91,13 @@ tarscpFunction() {
 }
 
 
+
+#Checks if the "-e" flag is used
+
+if [[ $1 == "-e" ]]; then
+    ## Insert encrypt here...
+fi
+
 # Checks if input is a working Directory
 # If valid Dir, begins tar
 
