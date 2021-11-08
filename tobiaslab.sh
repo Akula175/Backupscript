@@ -13,7 +13,7 @@ KEY=~/.ssh/id_rsa.pub
 
 # Variable for TEMP location
 
-TEMP=$LDIR/temp
+TEMP=/etc/tmp/temp
 
 
 # Checks if backup Directory exists, otherwise it gets created (silent)
