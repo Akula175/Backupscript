@@ -29,8 +29,9 @@ fi
 
 
 
-## Function to archive and compress directories with tar and gzip.
-## Add your directories to the variable source or change the variable to suit your script.
+# Function to archive and compress directories with tar and gzip
+# Source == Directory that should be zipped
+# Archive == Destination Directory
 
 tarFunction() {
 
@@ -67,8 +68,8 @@ tarscpFunction() {
     archive="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d_%H%M%S")'.tar.gz'
 
 
-    ## Check if the source directory exist otherwise exit.
-    ## if the source directory exist, create the archive.
+    # Check if the source directory exist otherwise exit
+    # if the source directory exist, create the archive
 
     if [[ -z $source ]]; then
         echo "Source directory is empty" && exit 1
@@ -79,7 +80,7 @@ tarscpFunction() {
     fi
 
 
-    ## Check if CHECKSUM is correct
+    # Check if CHECKSUM is correct
 
     if [[ -f $archive.CHECKSUM ]]; then
         command sha512sum -c $archive.CHECKSUM >/dev/null 2>&1 && echo success || echo failed
@@ -102,7 +103,7 @@ fi
 
 if [[ $1 =~ [a-z]@[0-9] ]]; then
     echo "Entered IP address, starting scp"
-    rsync -zarvh $1:$2 $TEMP
+    rsync -zarvh -e "ssh -i $KEY" $1:$2 $TEMP
     tarscpFunction 
     rm -rf $TEMP/*
 fi
