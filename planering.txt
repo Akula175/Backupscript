@@ -10,13 +10,13 @@
 
 ## Features:
 
-## Scheduler; backups should be scheduled to be run ahead of time.
+## Scheduler; backups should be scheduled to be run ahead of time.                  ##DONE##
 
-## Restore; script should be able to restore backups to the original destination. 
+## Restore; script should be able to restore backups to the original destination.  
 
 ## Restore test; script should test restores by restoring to a test directory.
 
-## Remote; script should be able to back up via SSH remotely.
+## Remote; script should be able to back up via SSH remotely.                       ##DONE##
 
 ## Encryption; script should support encryption.
 
