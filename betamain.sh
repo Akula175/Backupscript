@@ -3,21 +3,12 @@
 # Reads Input from user using flags in this order:
 # "/local/directory" OR "user@server /remote/directory"
 
-# Variable for local backup folder. Change this if you want the backup to save in a different location
-
 source ./functions.sh
 
-source=$1
-
-LDIR=$HOME/backup
-
-# Variable for Key. Change this if your ssh key is in a different location
-
-KEY=~/.ssh/mypubkey.pub
-
-# Variable for TEMP location
-
-TEMP=/tmp/temp
+source=$1                    # 
+LDIR=$HOME/backup            # Variable for local backup folder. Change this if you want the backup to save in a different location
+KEY=~/.ssh/mypubkey.pub      # Variable for Key. Change this if your ssh key is in a different location
+TEMP=/tmp/temp               # Variable for TEMP location
 
 # Check if Cron and rsync are installed otherwise exit
 cronCheck=$(crontab -V 2>/dev/null)
