@@ -20,9 +20,19 @@ KEY=~/.ssh/mypubkey.pub
 TEMP=/tmp/temp
 
 # Check if Cron and rsync are installed otherwise exit
+cronCheck=$(crontab -V 2>/dev/null)
+rsyncCheck=$(rsync -V 2>/dev/null)
 
-function cronChk
-function rsyncChk
+if [[ ! $cronCheck ]]; then
+    echo "cron is not installed"    
+    exit 1
+fi
+
+if [[ ! $rsyncCheck ]]; then
+    echo "rsync is not installed"
+    exit 1
+fi
+
 
 # Checks if backup Directory exists, otherwise it gets created (silent)
 # Also checks if temp Directory exists, otherwise this will also get created
