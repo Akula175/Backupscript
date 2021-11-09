@@ -5,7 +5,7 @@
 
 source ./functions.sh
 
-source=$1                    # 
+BFILES=$1                    # Variable for files to backup, reads from user input.
 LDIR=$HOME/backup            # Variable for local backup folder. Change this if you want the backup to save in a different location
 KEY=~/.ssh/mypubkey.pub      # Variable for Key. Change this if your ssh key is in a different location
 TEMP=/tmp/temp               # Variable for TEMP location
@@ -37,24 +37,24 @@ fi
 fi
 
 ## Activates encryption if "-e" flag is set.
-function encryptFunction
+encryptFunction 
 
 ## Activates decryption if "-d" flag is set.
-function decryptFunction
+decryptFunction
 
 # Checks if input is a working Directory
 # If valid Dir, begins tar
 
-if [[ $source =~ [/][a-z] ]] && [[ ! $source =~ [0-9] ]]; then
+if [[ $BFILES =~ [/][a-z] ]] && [[ ! $BFILES =~ [0-9] ]]; then
     tarFunction 
 fi
 
 # Checks if input is an IP addr
 # If valid IP, begins scp or Rsync
 
-if [[ $source =~ [a-z]@[0-9] ]]; then
+if [[ $BFILES =~ [a-z]@[0-9] ]]; then
     echo "Entered IP address, starting scp"
-    rsync -zarvh -e "ssh -i $KEY" $source:$2 $TEMP
+    rsync -zarvh -e "ssh -i $KEY" $BFILES:$2 $TEMP
     tarscpFunction 
     rm -rf $TEMP/*
 fi
