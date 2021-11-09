@@ -47,7 +47,7 @@ tarFunction() {
     elif [[ ! -d $SDIR ]]; then
         echo "$SDIR doesn't exist" && exit 1
     else
-        tar -cvzf $ARCHIVE -C $SDIR . >/dev/null 2>&1 && (command sha512sum $ARCHIVE > $ARCHIVE.CHECKSUM)
+        tar -cvzfp $ARCHIVE -C $SDIR . >/dev/null 2>&1 && (command sha512sum $ARCHIVE > $ARCHIVE.CHECKSUM)
     fi
 
 
@@ -76,7 +76,7 @@ tarscpFunction() {
     elif [[ ! -d $SDIR ]]; then
         echo "$SDIR doesn't exist" && exit 1
     else
-        tar -cvzf $ARCHIVE -C $SDIR . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
+        tar -cvzfp $ARCHIVE -C $SDIR . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
     fi
 
 
