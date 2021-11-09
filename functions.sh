@@ -1,3 +1,7 @@
+#!/bin/bash
+
+#### Functions ####
+
 cronChk () {
 cronCheck=$(crontab -V 2>/dev/null)
 
