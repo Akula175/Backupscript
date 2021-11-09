@@ -1,26 +1,10 @@
 #!/bin/bash
 
-#### Functions ####
-
-cronChk () {
-cronCheck=$(crontab -V 2>/dev/null)
-
-## checks if cron and rsync exist otherwise exit.
-
-if [[ ! $cronCheck ]]; then
-    echo "cron is not installed"    
-    exit 1
-fi
-}
-
-rsyncChk () {
-rsyncCheck=$(rsync -V 2>/dev/null)
-if [[ ! $rsyncCheck ]]; then
-    echo "rsync is not installed"
-    exit 1
-fi
-}
-
+###################
+#                 #
+#    Functions    #
+#                 #  
+###################
 
 
 # Function to archive and compress directories with tar and gzip
