@@ -111,6 +111,7 @@ if [[ $1 == "-e" ]]; then
 fi
 
 # Checks if the "-d" flag is used. This is for decryption of a encrypted file
+# Uses the same process as the function above.
 
 if [[ $1 == "-d" ]]; then 
     cd $LDIR
