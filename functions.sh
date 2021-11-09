@@ -7,25 +7,28 @@
 ###################
 
 
+
+
+
 # Function to archive and compress directories with tar and gzip
 # Source == Directory that should be zipped
 # Archive == Destination Directory
 
 tarFunction() {
 
-    source=$source                      					   
+    source=$BFILES                      					   
     archive="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d_%H%M%S")'.tar.gz'
 
 
     ## Check if the source directory exist otherwise exit.
     ## if the source directory exist, create the archive.
 
-    if [[ -z $source ]]; then
+    if [[ -z $BFILES ]]; then
         echo "Source directory is empty" && exit 1
-    elif [[ ! -d $source ]]; then
-        echo "$source doesn't exist" && exit 1
+    elif [[ ! -d $BFILES ]]; then
+        echo "$BFILES doesn't exist" && exit 1
     else
-        tar -cvzf $archive -C $source . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
+        tar -cvzf $archive -C $BFILES . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
     fi
 
 
@@ -42,19 +45,19 @@ tarFunction() {
 
 tarscpFunction() {
 
-    source=$TEMP                     					   
+    source=$BFILES                     					   
     archive="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d_%H%M%S")'.tar.gz'
 
 
     # Check if the source directory exist otherwise exit
     # if the source directory exist, create the archive
 
-    if [[ -z $source ]]; then
+    if [[ -z $BFILES ]]; then
         echo "Source directory is empty" && exit 1
-    elif [[ ! -d $source ]]; then
-        echo "$source doesn't exist" && exit 1
+    elif [[ ! -d $BFILES ]]; then
+        echo "$BFILES doesn't exist" && exit 1
     else
-        tar -cvzf $archive -C $source . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
+        tar -cvzf $archive -C $BFILES . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
     fi
 
 
@@ -68,14 +71,15 @@ tarscpFunction() {
 
 }
 
-encryptFunction () {
 
 
 # Checks if the "-e" flag is used. This is for encryption of a file
 # Then proceeds to ask for file to encrypt and runs the encryption on input file
 # $LINE == input file
+encryptFunction () {
 
-if [[ $source == "-e" ]]; then 
+
+if [[ $BFILES == "-e" ]]; then 
     cd $LDIR
     ls *tar.gz
     read -p "Which file do you want to encrypt?: " LINE
@@ -90,11 +94,12 @@ if [[ $source == "-e" ]]; then
 fi
 
 }
-# Checks if the "-d" flag is used. This is for decryption of a encrypted file
 
+
+### Checks if the "-d" flag is used. This is for decryption of a encrypted file
 decryptFunction () {
 
-if [[ $source == "-d" ]]; then 
+if [[ $BFILES == "-d" ]]; then 
     cd $LDIR
     ls *.gpg
     read -p "Which file do you want to encrypt?: " LINE
@@ -107,4 +112,5 @@ if [[ $source == "-d" ]]; then
         rm -r $LINE
     fi
 fi
+
 }
