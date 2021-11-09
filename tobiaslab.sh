@@ -47,7 +47,7 @@ tarFunction() {
     elif [[ ! -d $source ]]; then
         echo "$source doesn't exist" && exit 1
     else
-        tar -cpzf $archive -C $source . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
+        tar -cvzf $archive -C $source . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
     fi
 
 
@@ -76,7 +76,7 @@ tarscpFunction() {
     elif [[ ! -d $source ]]; then
         echo "$source doesn't exist" && exit 1
     else
-        tar -cpzf $archive -C $source . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
+        tar -cvzf $archive -C $source . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
     fi
 
 
@@ -92,11 +92,40 @@ tarscpFunction() {
 
 
 
-#Checks if the "-e" flag is used
+# Checks if the "-e" flag is used. This is for encryption of a file
+# Then proceeds to ask for file to encrypt and runs the encryption on input file
+# $LINE == input file
 
 if [[ $1 == "-e" ]]; then 
-    echo "Success"
+    cd $LDIR
+    ls *tar.gz
+    read -p "Which file do you want to encrypt?: " LINE
+    
+    if [[ ! -e "$LINE" ]]; then 
+        echo "Input is not a valid file." && exit 1
+    else
+        gpg -c $LINE
+        echo "Encryption Successful"
+        rm -r $LINE
+    fi
 fi
+
+# Checks if the "-d" flag is used. This is for decryption of a encrypted file
+
+if [[ $1 == "-d" ]]; then 
+    cd $LDIR
+    ls *.gpg
+    read -p "Which file do you want to encrypt?: " LINE
+    
+    if [[ ! -e "$LINE" ]]; then 
+        echo "Input is not a valid file." && exit 1
+    else
+        gpg -o $HOSTNAME'_'$(date +"%Y-%m-%d_%H%M%S")'.tar.gz' -d $LINE
+        echo "Decryption Successful"
+        rm -r $LINE
+    fi
+fi
+
 
 # Checks if input is a working Directory
 # If valid Dir, begins tar
