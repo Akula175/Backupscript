@@ -74,23 +74,15 @@ tarscpFunction() {
 
 
 # Checks if the "-e" flag is used. This is for encryption of a file
-# Then proceeds to ask for file to encrypt and runs the encryption on input file
-# $LINE == input file
+# Then proceeds to automatically encrypts the file created by tarFunction.
+# An interactive shell opens where the user is required to set a password
+
 encryptFunction () {
-
-
-if [[ $BFILES == "-e" ]]; then 
-    cd $LDIR
-    ls *tar.gz
-    read -p "Which file do you want to encrypt?: " LINE
-    
-    if [[ ! -e "$LINE" ]]; then 
-        echo "Input is not a valid file." && exit 1
-    else
-        gpg -c $LINE
-        echo "Encryption Successful"
-        rm -r $LINE
-    fi
+if [[ $FLAG_E ]]; then 
+    command gpg -o $archive.enc --symmetric --cipher-algo aes256 $archive
+    echo "Encryption Successful"
+else
+    echo "Something went wrong...exiting" && exit 1
 fi
 
 }
