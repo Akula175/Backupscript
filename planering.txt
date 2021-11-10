@@ -18,6 +18,17 @@
 
 ## Remote; script should be able to back up via SSH remotely.                       ##DONE##
 
-## Encryption; script should support encryption.
+## Encryption; script should support encryption.                                    ##DONE## (but not automated)
 
 ## Installation script; create a sepparate script that installs the script in Cron
+
+
+## Things that are left to do;
+
+## Backup test and Restore
+
+## Import functions
+
+## Alter code to look better where possible
+
+## Cron Installer?
