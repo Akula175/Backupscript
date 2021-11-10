@@ -47,7 +47,9 @@ tarFunction() {
     elif [[ ! -d $SDIR ]]; then
         echo "$SDIR doesn't exist" && exit 1
     else
-        tar -cvzf $ARCHIVE -C $SDIR . >/dev/null 2>&1 && (command sha512sum $ARCHIVE > $ARCHIVE.CHECKSUM)
+        touch $1filedir24; echo $1 > $1filedir24
+        tar -cpzf $ARCHIVE -C $SDIR . >/dev/null 2>&1 && (command sha512sum $ARCHIVE > $ARCHIVE.CHECKSUM)
+        rm $1filedir24
     fi
 
 
@@ -64,7 +66,7 @@ tarFunction() {
 
 tarscpFunction() {
 
-    SDIR=$TEMP                     					   
+    SDIR=$TEMP                   					   
     ARCHIVE="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d_%H%M%S")'.tar.gz'
 
 
@@ -76,7 +78,7 @@ tarscpFunction() {
     elif [[ ! -d $SDIR ]]; then
         echo "$SDIR doesn't exist" && exit 1
     else
-        tar -cvzf $ARCHIVE -C $SDIR . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
+        tar -cpzf $ARCHIVE -C $SDIR . >/dev/null 2>&1 && (command sha512sum $ARCHIVE > $ARCHIVE.CHECKSUM)
     fi
 
 
@@ -144,3 +146,35 @@ if [[ $1 =~ [a-z]@[0-9] ]]; then
     tarscpFunction 
     rm -rf $TEMP/*
 fi
+
+
+# Restore function
+
+restoreFunction () {
+    tar -xvf $LDIR/$LINE2 -C $TEMP
+    cd $TEMP
+    RSTR=$(cat filedir24)
+    rm filedir24
+    cp $TEMP/* $RSTR
+
+
+}
+
+
+# Restore prompt
+
+if [[ $1 == "-r" ]]; then 
+    cd $LDIR
+    ls *.gz
+    read -p "Which file do you want to restore?: " LINE2
+    
+    if [[ ! -e "$LINE2" ]]; then 
+        echo "Input is not a valid file." && exit 1
+    else
+        restoreFunction
+        rm -rf $TEMP/*
+    fi
+fi
+
+
+echo "Finished in $SECONDS seconds"
