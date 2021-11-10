@@ -23,12 +23,12 @@ tarFunction() {
     ## Check if the source directory exist otherwise exit.
     ## if the source directory exist, create the archive.
 
-    if [[ -z $BFILES ]]; then
+    if [[ -z $source ]]; then
         echo "Source directory is empty" && exit 1
-    elif [[ ! -d $BFILES ]]; then
-        echo "$BFILES doesn't exist" && exit 1
+    elif [[ ! -d $source ]]; then
+        echo "$source doesn't exist" && exit 1
     else
-        tar -cvzf $archive -C $BFILES . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
+        tar -cvzf $archive -C $source . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
     fi
 
 
@@ -76,13 +76,16 @@ tarscpFunction() {
 # Checks if the "-e" flag is used. This is for encryption of a file
 # Then proceeds to automatically encrypts the file created by tarFunction.
 # An interactive shell opens where the user is required to set a password
+# Removes the old tar archive after it's encrypted
 
 encryptFunction () {
 if [[ $FLAG_E ]]; then 
     command gpg -o $archive.enc --symmetric --cipher-algo aes256 $archive
+    command rm $archive
     echo "Encryption Successful"
+
 else
-    echo "Something went wrong...exiting" && exit 1
+    echo "Something went wrong...exeting" && exit 1
 fi
 
 }
