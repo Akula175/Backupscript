@@ -5,10 +5,29 @@
 
 source ./functions.sh
 
-BFILES=$1                    # Variable for files to backup, reads from user input.
 LDIR=$HOME/backup            # Variable for local backup folder. Change this if you want the backup to save in a different location
 KEY=~/.ssh/mypubkey.pub      # Variable for Key. Change this if your ssh key is in a different location
 TEMP=/tmp/temp               # Variable for TEMP location
+
+
+## Checks if -e flag or -d flag are set from user input.
+while getopts "ed" OPTION
+do
+    case $OPTION in
+        e) 
+            FLAG_E=$1 ## Activates encryption
+            shift
+            ;;
+        d) 
+            FLAG_D=$1 ## Activates decryption
+            shift
+            ;;
+    esac
+done
+
+
+BFILES=$1                    # Variable for files to backup, reads from user input.
+
 
 # Check if Cron and rsync are installed otherwise exit
 cronCheck=$(crontab -V 2>/dev/null)
@@ -30,31 +49,33 @@ fi
 
 if [ ! -d $LDIR ]; then
     mkdir $LDIR
+fi
+
 if [ ! -d $TEMP ]; then
     mkdir $TEMP 
 fi
-
-fi
-
-## Activates encryption if "-e" flag is set.
-encryptFunction 
-
-## Activates decryption if "-d" flag is set.
-decryptFunction
 
 # Checks if input is a working Directory
 # If valid Dir, begins tar
 
 if [[ $BFILES =~ [/][a-z] ]] && [[ ! $BFILES =~ [0-9] ]]; then
-    tarFunction 
+   tarFunction
 fi
+
+
+## Activates encryption if "-e" flag is set.
+encryptFunction
+
+
+## Activates decryption if "-d" flag is set.
+decryptFunction
 
 # Checks if input is an IP addr
 # If valid IP, begins scp or Rsync
 
-if [[ $BFILES =~ [a-z]@[0-9] ]]; then
-    echo "Entered IP address, starting scp"
-    rsync -zarvh -e "ssh -i $KEY" $BFILES:$2 $TEMP
-    tarscpFunction 
-    rm -rf $TEMP/*
-fi
+#if [[ $BFILES =~ [a-z]@[0-9] ]]; then
+#    echo "Entered IP address, starting scp"
+#    rsync -zarvh -e "ssh -i $KEY" $BFILES:$2 $TEMP
+#    tarscpFunction 
+#    rm -rf $TEMP/*
+#fi
