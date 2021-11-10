@@ -116,7 +116,7 @@ fi
 if [[ $1 == "-d" ]]; then 
     cd $LDIR
     ls *.gpg
-    read -p "Which file do you want to encrypt?: " LINE
+    read -p "Which file do you want to decrypt?: " LINE
     
     if [[ ! -e "$LINE" ]]; then 
         echo "Input is not a valid file." && exit 1
