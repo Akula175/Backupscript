@@ -16,19 +16,22 @@
 
 tarFunction() {
 
-    source=$BFILES                      					   
-    archive="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d_%H%M%S")'.tar.gz'
+    ARCHSRC=$SDIR                      					   
+    archive="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d_%H-%M")'.tar.gz'
+    echo $source
 
 
     ## Check if the source directory exist otherwise exit.
     ## if the source directory exist, create the archive.
 
-    if [[ -z $source ]]; then
+    if [[ -z $ARCHSRC ]]; then
         echo "Source directory is empty" && exit 1
-    elif [[ ! -d $source ]]; then
-        echo "$source doesn't exist" && exit 1
+    elif [[ ! -d $ARCHSRC ]]; then
+        echo "$ARCHSRC doesn't exist" && exit 1
     else
-        tar -cvzf $archive -C $source . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
+        echo $ARCHSRC > $ARCHSRC/./filedir24
+        tar -cvzf $archive -C $ARCHSRC . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
+        rm $ARCHSRC/./filedir24
     fi
 
 
@@ -45,19 +48,19 @@ tarFunction() {
 
 tarscpFunction() {
 
-    source=$BFILES                     					   
+    source=$SDIR                     					   
     archive="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d_%H%M%S")'.tar.gz'
 
 
     # Check if the source directory exist otherwise exit
     # if the source directory exist, create the archive
 
-    if [[ -z $BFILES ]]; then
+    if [[ -z $SDIR ]]; then
         echo "Source directory is empty" && exit 1
-    elif [[ ! -d $BFILES ]]; then
-        echo "$BFILES doesn't exist" && exit 1
+    elif [[ ! -d $SDIR ]]; then
+        echo "$SDIR doesn't exist" && exit 1
     else
-        tar -cvzf $archive -C $BFILES . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
+        tar -cvzf $archive -C $SDIR . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
     fi
 
 
@@ -74,38 +77,50 @@ tarscpFunction() {
 
 
 # Checks if the "-e" flag is used. This is for encryption of a file
-# Then proceeds to automatically encrypts the file created by tarFunction.
-# An interactive shell opens where the user is required to set a password
-# Removes the old tar archive after it's encrypted
-
+# Then proceeds to ask for file to encrypt and runs the encryption on input file
+# $LINE == input file
 encryptFunction () {
+
+
 if [[ $FLAG_E ]]; then 
-    command gpg -o $archive.enc --symmetric --cipher-algo aes256 $archive
+    command openssl aes-256-cbc -a -salt -pbkdf2 -in $archive -out $archive.enc
     command rm $archive
     echo "Encryption Successful"
 
-else
-    echo "Something went wrong...exeting" && exit 1
 fi
-
 }
-
 
 ### Checks if the "-d" flag is used. This is for decryption of a encrypted file
 decryptFunction () {
 
-if [[ $BFILES == "-d" ]]; then 
+
+if [[ $FLAG_D ]]; then 
     cd $LDIR
-    ls *.gpg
+    ls *.enc
     read -p "Which file do you want to encrypt?: " LINE
     
     if [[ ! -e "$LINE" ]]; then 
         echo "Input is not a valid file." && exit 1
     else
-        gpg -o $HOSTNAME'_'$(date +"%Y-%m-%d_%H%M%S")'.tar.gz' -d $LINE
+        command openssl aes-256-cbc -d -a -salt -pbkdf2 -in $LINE -out ${LINE%.enc}
         echo "Decryption Successful"
-        rm -r $LINE
+        rm $LINE
     fi
 fi
 
 }
+
+# Restore function
+
+restoreFunction () {
+    tar -xpf $LDIR/$LINE2 -C $TEMP
+    cd $TEMP
+    RSTR=$(cat filedir24)
+    rm filedir24
+    cp $TEMP/* $RSTR
+
+
+}
+
+
+
