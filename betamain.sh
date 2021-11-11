@@ -83,7 +83,7 @@ decryptFunction
 if [[ $2 =~ [a-z]@[0-9] ]]; then
     echo "Entered IP address, starting scp"
     rsync -zarvh -e "ssh -i $KEY" $2:$SDIR $TEMP
-    ARCHSRCH=$TEMP
+    ARCHSRC=$TEMP
     tarFunction 
     rm -rf $TEMP/*
 fi
@@ -103,3 +103,5 @@ if [[ $FLAG_R ]]; then
         rm -rf $TEMP/*
     fi
 fi
+
+echo "Finished in $SECONDS seconds"
