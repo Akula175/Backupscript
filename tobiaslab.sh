@@ -47,9 +47,9 @@ tarFunction() {
     elif [[ ! -d $SDIR ]]; then
         echo "$SDIR doesn't exist" && exit 1
     else
-        touch $1filedir24; echo $1 > $1filedir24
+        touch $1/./filedir24; echo $1 > $1/./filedir24
         tar -cpzf $ARCHIVE -C $SDIR . >/dev/null 2>&1 && (command sha512sum $ARCHIVE > $ARCHIVE.CHECKSUM)
-        rm $1filedir24
+        rm $1/./filedir24
     fi
 
 
