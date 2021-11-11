@@ -81,7 +81,7 @@ decryptFunction
 
 if [[ $2 =~ [a-z]@[0-9] ]]; then
     echo "Entered IP address, starting scp"
-    rsync -zarvh -e "ssh -i $KEY" $2:SDIR $TEMP
+    rsync -zarvh -e "ssh -i $KEY" $2:$SDIR $TEMP
     tarscpFunction 
     rm -rf $TEMP/*
 fi
