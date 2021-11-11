@@ -37,10 +37,10 @@ SDIR=$1                    # Variable for files to backup, reads from user input
 cronCheck=$(crontab -V 2>/dev/null)
 rsyncCheck=$(rsync -V 2>/dev/null)
 
-if [[ ! $cronCheck ]]; then
-    echo "cron is not installed"    
-    exit 1
-fi
+#if [[ ! $cronCheck ]]; then
+#   echo "cron is not installed"    
+#   exit 1
+#fi
 
 if [[ ! $rsyncCheck ]]; then
     echo "rsync is not installed"
