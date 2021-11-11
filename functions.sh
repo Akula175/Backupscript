@@ -18,7 +18,6 @@ tarFunction() {
 
     ARCHSRC=$SDIR                      					   
     archive="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d_%H-%M")'.tar.gz'
-    echo $source
 
 
     ## Check if the source directory exist otherwise exit.
