@@ -64,7 +64,8 @@ fi
 
 if [[ ! $FLAG_D && ! $FLAG_R ]]; then
     if [[ $SDIR =~ [/][a-z] ]] && [[ ! $SDIR =~ [0-9] ]]; then
-        tarFunction
+        ARCHSRC=$SDIR
+        tarFunction 
     fi
 fi
 
@@ -82,7 +83,8 @@ decryptFunction
 if [[ $2 =~ [a-z]@[0-9] ]]; then
     echo "Entered IP address, starting scp"
     rsync -zarvh -e "ssh -i $KEY" $2:$SDIR $TEMP
-    tarscpFunction 
+    ARCHSRCH=$TEMP
+    tarFunction 
     rm -rf $TEMP/*
 fi
  
