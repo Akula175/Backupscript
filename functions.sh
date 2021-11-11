@@ -16,9 +16,8 @@
 
 tarFunction() {
 
-    ARCHSRC=$SDIR                      					   
+    #ARCHSRC=$SDIR                      					   
     archive="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d_%H-%M")'.tar.gz'
-    echo $source
 
 
     ## Check if the source directory exist otherwise exit.
@@ -44,36 +43,6 @@ tarFunction() {
     fi
 
 }
-
-
-tarscpFunction() {
-
-    source=$SDIR                     					   
-    archive="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d_%H%M%S")'.tar.gz'
-
-
-    # Check if the source directory exist otherwise exit
-    # if the source directory exist, create the archive
-
-    if [[ -z $SDIR ]]; then
-        echo "Source directory is empty" && exit 1
-    elif [[ ! -d $SDIR ]]; then
-        echo "$SDIR doesn't exist" && exit 1
-    else
-        tar -cvzf $archive -C $SDIR . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
-    fi
-
-
-    # Check if CHECKSUM is correct
-
-    if [[ -f $archive.CHECKSUM ]]; then
-        command sha512sum -c $archive.CHECKSUM >/dev/null 2>&1 && echo success || echo failed
-    else
-        echo "The archive file and checksum file doesn't match" && exit 1
-    fi
-
-}
-
 
 
 # Checks if the "-e" flag is used. This is for encryption of a file
@@ -113,12 +82,10 @@ fi
 # Restore function
 
 restoreFunction () {
-if [[ $FLAG_R ]]; then
     tar -xpf $LDIR/$LINE2 -C $TEMP
     cd $TEMP
     RSTR=$(cat filedir24)
     rm filedir24
     cp $TEMP/* $RSTR
-fi
 
 }
