@@ -112,12 +112,13 @@ fi
 # Restore function
 
 restoreFunction () {
+if [[ FLAG_R ]]; then
     tar -xpf $LDIR/$LINE2 -C $TEMP
     cd $TEMP
     RSTR=$(cat filedir24)
     rm filedir24
     cp $TEMP/* $RSTR
-
+fi
 
 }
 
