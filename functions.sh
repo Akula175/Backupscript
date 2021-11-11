@@ -18,6 +18,7 @@ tarFunction() {
 
     ARCHSRC=$SDIR                      					   
     archive="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d_%H-%M")'.tar.gz'
+    echo $source
 
 
     ## Check if the source directory exist otherwise exit.
@@ -112,7 +113,7 @@ fi
 # Restore function
 
 restoreFunction () {
-if [[ FLAG_R ]]; then
+if [[ $FLAG_R ]]; then
     tar -xpf $LDIR/$LINE2 -C $TEMP
     cd $TEMP
     RSTR=$(cat filedir24)
@@ -121,6 +122,3 @@ if [[ FLAG_R ]]; then
 fi
 
 }
-
-
-
