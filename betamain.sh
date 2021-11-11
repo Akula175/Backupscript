@@ -11,9 +11,9 @@ TEMP=/tmp/temp               # Variable for TEMP location
 
 
 ## Checks if -e flag or -d flag are set from user input.
-while getopts "ed" OPTION
+while getopts "ed" FLAGS
 do
-    case $OPTION in
+    case $FLAGS in
         e) 
             FLAG_E=$1 ## Activates encryption
             shift
@@ -22,11 +22,15 @@ do
             FLAG_D=$1 ## Activates decryption
             shift
             ;;
+        r)
+            FLAG_R=$1 ## Activates restore function
+            shift
+            ;;
     esac
 done
 
 
-BFILES=$1                    # Variable for files to backup, reads from user input.
+SDIR=$1                    # Variable for files to backup, reads from user input.
 
 
 # Check if Cron and rsync are installed otherwise exit
@@ -58,7 +62,7 @@ fi
 # Checks if input is a working Directory
 # If valid Dir, begins tar
 
-if [[ $BFILES =~ [/][a-z] ]] && [[ ! $BFILES =~ [0-9] ]]; then
+if [[ $SDIR =~ [/][a-z] ]] && [[ ! $SDIR =~ [0-9] ]]; then
    tarFunction
 fi
 
@@ -73,9 +77,24 @@ decryptFunction
 # Checks if input is an IP addr
 # If valid IP, begins scp or Rsync
 
-#if [[ $BFILES =~ [a-z]@[0-9] ]]; then
-#    echo "Entered IP address, starting scp"
-#    rsync -zarvh -e "ssh -i $KEY" $BFILES:$2 $TEMP
-#    tarscpFunction 
-#    rm -rf $TEMP/*
-#fi
+if [[ $SDIR =~ [a-z]@[0-9] ]]; then
+    echo "Entered IP address, starting scp"
+    rsync -zarvh -e "ssh -i $KEY" $SDIR:$2 $TEMP
+    tarscpFunction 
+    rm -rf $TEMP/*
+fi
+
+# Restore prompt
+
+if [[ $FLAG_R ]]; then 
+    cd $LDIR
+    ls *.gz
+    read -p "Which file do you want to restore?: " LINE2
+    
+    if [[ ! -e "$LINE2" ]]; then 
+        echo "Input is not a valid file." && exit 1
+    else
+        restoreFunction
+        rm -rf $TEMP/*
+    fi
+fi
