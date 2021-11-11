@@ -151,7 +151,7 @@ fi
 # Restore function
 
 restoreFunction () {
-    tar -xvf $LDIR/$LINE2 -C $TEMP
+    tar -xpf $LDIR/$LINE2 -C $TEMP
     cd $TEMP
     RSTR=$(cat filedir24)
     rm filedir24
