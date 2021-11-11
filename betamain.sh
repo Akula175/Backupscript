@@ -11,7 +11,7 @@ TEMP=/tmp/temp               # Variable for TEMP location
 
 
 ## Checks if -e flag or -d flag are set from user input.
-while getopts "ed" FLAGS
+while getopts "edr" FLAGS
 do
     case $FLAGS in
         e) 
@@ -62,8 +62,10 @@ fi
 # Checks if input is a working Directory
 # If valid Dir, begins tar
 
-if [[ $SDIR =~ [/][a-z] ]] && [[ ! $SDIR =~ [0-9] ]]; then
-   tarFunction
+if [[ ! $FLAG_D && ! $FLAG_R ]]; then
+    if [[ $SDIR =~ [/][a-z] ]] && [[ ! $SDIR =~ [0-9] ]]; then
+        tarFunction
+    fi
 fi
 
 
@@ -77,14 +79,13 @@ decryptFunction
 # Checks if input is an IP addr
 # If valid IP, begins scp or Rsync
 
-if [[ $SDIR =~ [a-z]@[0-9] ]]; then
+if [[ $2 =~ [a-z]@[0-9] ]]; then
     echo "Entered IP address, starting scp"
-    rsync -zarvh -e "ssh -i $KEY" $SDIR:$2 $TEMP
+    rsync -zarvh -e "ssh -i $KEY" $2:SDIR $TEMP
     tarscpFunction 
     rm -rf $TEMP/*
 fi
-
-restoreFunction 
+ 
 
 # Restore prompt
 
