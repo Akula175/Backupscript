@@ -84,6 +84,8 @@ if [[ $SDIR =~ [a-z]@[0-9] ]]; then
     rm -rf $TEMP/*
 fi
 
+restoreFunction
+
 # Restore prompt
 
 if [[ $FLAG_R ]]; then 
