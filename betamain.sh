@@ -38,9 +38,9 @@ cronCheck=$(crontab -V 2>/dev/null)
 rsyncCheck=$(rsync -V 2>/dev/null)
 
 #if [[ ! $cronCheck ]]; then
-#   echo "cron is not installed"    
-#   exit 1
-#fi
+#    echo "cron is not installed"    
+#    exit 1
+#fi#
 
 if [[ ! $rsyncCheck ]]; then
     echo "rsync is not installed"
@@ -84,7 +84,7 @@ if [[ $SDIR =~ [a-z]@[0-9] ]]; then
     rm -rf $TEMP/*
 fi
 
-restoreFunction
+restoreFunction 
 
 # Restore prompt
 
