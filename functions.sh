@@ -7,6 +7,17 @@
 ###################
 
 
+## Opens a help menu if no argument is given to the script
+helpFunction () {
+    SCRIPTNAME=$(basename $0)
+    printf "Usage:\n\n $SCRIPTNAME [options] file\n $SCRIPTNAME [options]\n\n"
+    printf \
+    "Options: \n\
+    -h  --help     <file>      Shows this help
+    -e  --encrypt  <file>            Encrypts the file\n\
+    -d  --decrypt  <file>      Decrypts a file based on first arg w/o arg user gets promopted\n\
+    -r  --restore  <file>      Restores files based on first arg w/o arg user gets promopted\n\n"
+}
 
 
 
