@@ -59,18 +59,13 @@ tarFunction() {
 }
 
 
-# Checks if the "-e" flag is used. This is for encryption of a file
-# Then proceeds to ask for file to encrypt and runs the encryption on input file
-# $LINE == input file
+# Encrypts a file after it has been archived by tar.
+# Uses tar's output file as source.
+# Encryption method used is symmetric OpenSSL.
 encryptFunction () {
-
-
-if [[ $FLAG_E ]]; then 
     command openssl aes-256-cbc -a -salt -pbkdf2 -in $archive -out $archive.enc
     command rm $archive
     echo "Encryption Successful"
-
-fi
 }
 
 ### Checks if the "-d" flag is used. This is for decryption of a encrypted file
