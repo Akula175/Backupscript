@@ -124,11 +124,7 @@ fi
 # Restore prompt
 
 if [[ $FLAG_R ]]; then 
-    cd $LDIR
-    ls *.gz
-    read -p "Which file do you want to restore?: " LINE2
-    
-    if [[ ! -e "$LINE2" ]]; then 
+   if [[ ! -e "$SDIR" ]]; then 
         echo "Input is not a valid file." && exit 1
     else
         restoreFunction
