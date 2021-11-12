@@ -93,7 +93,7 @@ fi
 # Checks if input is a working Directory
 # If valid Dir, begins tar
 
-if [[ $FLAG_L ]]; then
+if [[ $FLAG_L || $FLAG_E ]]; then
     if [[ -z $2 ]]; then
         ARCHSRC=$SDIR
         tarFunction 
