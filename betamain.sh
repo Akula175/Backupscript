@@ -45,10 +45,13 @@ do
                     SDIR=$3
                 fi
             fi
+            FLAG_S=$1
             ;;
     esac
     shift
 done
+
+
 
 #if [[ ! $1 -eq "" ]]; then
 #    SDIR=$1                    # Variable for files to backup, reads from user input.
@@ -84,7 +87,7 @@ fi
 # Checks if input is a working Directory
 # If valid Dir, begins tar
 
-if [[ ! $FLAG_D && ! $FLAG_R ]]; then
+if [[ ! $FLAG_D && ! $FLAG_R && ! $FLAG_S ]]; then
     if [[ -z $2 ]]; then
         ARCHSRC=$SDIR
         tarFunction 
