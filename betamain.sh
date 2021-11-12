@@ -47,6 +47,12 @@ do
             fi
             FLAG_S=$1
             ;;
+        --local | -l)
+            if [[ "$2" ]]; then
+                SDIR=$2
+            fi
+            FLAG_L=$1
+            ;;
     esac
     shift
 done
@@ -87,7 +93,7 @@ fi
 # Checks if input is a working Directory
 # If valid Dir, begins tar
 
-if [[ ! $FLAG_D && ! $FLAG_R && ! $FLAG_S ]]; then
+if [[ $FLAG_L ]]; then
     if [[ -z $2 ]]; then
         ARCHSRC=$SDIR
         tarFunction 
@@ -105,8 +111,6 @@ decryptFunction
 # Checks if input is an IP addr
 # If valid IP, begins scp or Rsync
 
-echo "SSH innehåller $SSH"
-echo "SDIR innehåller $SDIR"
 
 if [[ $SSH =~ [a-z]@[0-9] ]]; then
     echo "Entered IP address, starting scp"
