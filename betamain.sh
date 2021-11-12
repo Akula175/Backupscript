@@ -28,7 +28,7 @@ do
             FLAG_E=$1 ## Activates encryption
             ;;
         --decrypt | -d)
-             FLAG_D=$1 ## Activates decryption
+            FLAG_D=$1 ## Activates decryption
             #shift
             ;;
         --restore | -r)
@@ -38,10 +38,14 @@ do
             FLAG_R=$1 ## Activates restore function
             #shift
             ;;
-#        --ssh | -s)
-#            if [[ "$2" ]]; then
-#            fi  
-#            ;;
+        --ssh | -s)
+            if [[ "$2" ]]; then
+                SSH=$2
+                if [[ "$3" ]]; then
+                    SDIR=$3
+                fi
+            fi  
+            ;;
     esac
     shift
 done
@@ -98,7 +102,7 @@ decryptFunction
 # Checks if input is an IP addr
 # If valid IP, begins scp or Rsync
 
-if [[ $2 =~ [a-z]@[0-9] ]]; then
+if [[ $SSH =~ [a-z]@[0-9] ]]; then
     echo "Entered IP address, starting scp"
     rsync -zarvh -e "ssh -i $KEY" $2:$SDIR $TEMP
     ARCHSRC=$TEMP
