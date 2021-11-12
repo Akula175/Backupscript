@@ -44,8 +44,7 @@ do
                 if [[ "$3" ]]; then
                     SDIR=$3
                 fi
-            fi  
-            FLAG_S=$1
+            fi
             ;;
     esac
     shift
@@ -85,7 +84,7 @@ fi
 # Checks if input is a working Directory
 # If valid Dir, begins tar
 
-if [[ ! $FLAG_D && ! $FLAG_R && $FLAG_S ]]; then
+if [[ ! $FLAG_D && ! $FLAG_R ]]; then
     if [[ -z $2 ]]; then
         ARCHSRC=$SDIR
         tarFunction 
@@ -102,6 +101,9 @@ decryptFunction
 
 # Checks if input is an IP addr
 # If valid IP, begins scp or Rsync
+
+echo "SSH innehåller $SSH"
+echo "SDIR innehåller $SDIR"
 
 if [[ $SSH =~ [a-z]@[0-9] ]]; then
     echo "Entered IP address, starting scp"
