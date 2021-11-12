@@ -35,7 +35,7 @@ do
                 FLAG_E=$1
             fi
             ;;
-        --decrypt | -d)         # Activates decryption, opens a prompt where the user can specify witch file to decrypt.
+        --decrypt | -d)         # Activates decryption, opens a prompt where the user can specify which file to decrypt.
             FLAG_D=$1 
             
             ;;
