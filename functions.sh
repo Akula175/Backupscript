@@ -26,7 +26,8 @@ helpFunction () {
 
 # Function to archive and compress directories with tar and gzip
 # No source directory is specified here. The source directory is added in the main script before calling this function.
-# archive == destination directory and name
+# >> Specify the directory in the main script with the $ARCHSRC variable.
+# archive == the archived and compress file will be placed in this directory.
 
 tarFunction() {
 
@@ -60,7 +61,7 @@ tarFunction() {
 
 
 # Encrypts a file after it has been archived by tar.
-# Uses tar's output file as source.
+# Uses tar's output file as source which is placed in the variable $archive.
 # Encryption method used is symmetric OpenSSL.
 encryptFunction () {
     command openssl aes-256-cbc -a -salt -pbkdf2 -in $archive -out $archive.enc
