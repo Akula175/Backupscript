@@ -15,7 +15,7 @@ helpFunction () {
     printf \
     "Options: \n\
     -h  --help     <file>         Shows this help
-    -e  --encrypt  <file>         Encrypts the file\n\
+    -e  --encrypt  <file>         Encrypts the file\n\n\
     -d  --decrypt  <file>         Decrypts a file based on first arg w/o arg user gets promopted\n\
     -r  --restore  <file>         Restores files based on first arg w/o arg user gets promopted\n\n\
     -s --ssh       <usr@server>   Starts the rsync process for backing up remote files\n\
