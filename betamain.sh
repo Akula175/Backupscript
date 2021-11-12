@@ -115,7 +115,7 @@ decryptFunction
 if [[ $SSH =~ [a-z]@[0-9] ]]; then
     echo "Entered IP address, starting scp"
     rsync -zarvh -e "ssh -i $KEY" $SSH:$SDIR $TEMP
-    ARCHSRC=$TEMP
+    ARCHSRC=$TEMP         ## ARCHSRS is used in tarFunction to declare $TEMP
     tarFunction 
     rm -rf $TEMP/*
 fi
