@@ -45,7 +45,7 @@ do
             fi
             FLAG_R=$1 
             ;;
-        --ssh | -s)             # Activates SSH function, uses $KEY for publik key and copy files remotely with rsync.
+        --ssh | -s)             # Activates SSH function, uses $KEY for public key and copy files remotely with rsync.
             if [[ "$2" ]]; then
                 SSH=$2
                 if [[ "$3" ]]; then
@@ -54,7 +54,7 @@ do
             fi
             FLAG_S=$1
             ;;
-        --local | -l)           # Used for local backup, requires an argument to the directory to backup.
+        --local | -l)           # Used for local backup, requires the backup directory to be specified.
             if [[ "$2" ]]; then
                 SDIR=$2
             fi
@@ -89,7 +89,7 @@ fi
 if [[ $FLAG_L || $FLAG_E ]]; then
     if [[ -z $2 ]]; then
         ARCHSRC=$SDIR  # Uses the specified directory as source for tar
-        tarFunction    # Runs tar with the specified dir as source.
+        tarFunction    
     fi
 fi
 
