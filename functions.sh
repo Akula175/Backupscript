@@ -30,9 +30,9 @@ helpFunction () {
 
 tarFunction() {
 
-    #ARCHSRC=$SDIR                      					   
-    archive="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d_%H-%M")'.tar.gz'
-
+                      					  
+    archive="$LDIR"/$HOSTNAME'_'$(date +'(%Y-%m-%d)'"-%H")'.tar.gz'
+    #archive="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d")'.tar.gz'
 
     ## Check if the source directory exist otherwise exit.
     ## if the source directory exist, create the archive.
