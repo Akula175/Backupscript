@@ -7,9 +7,10 @@
 ###################
 
 
+
+helpFunction () {
 ## Opens a help menu if no argument is given to the script or-
 # if the -h / --help flag is set.
-helpFunction () {
     SCRIPTNAME=$(basename $0)
     printf "Usage:\n\n $SCRIPTNAME [options] file\n $SCRIPTNAME [options]\n\n"
     printf \
@@ -24,13 +25,11 @@ helpFunction () {
 
 
 
+tarFunction() {
 # Function to archive and compress directories with tar and gzip
 # No source directory is specified here. The source directory is added in the main script before calling this function.
 # >> Specify the directory in the main script with the $ARCHSRC variable.
-# archive == the archived and compress file will be placed in this directory.
-
-tarFunction() {
-
+# archive == the archived and compressed file will be placed in this directory.
                       					  
     archive="$LDIR"/$HOSTNAME'_'$(date +'(%Y-%m-%d)'"-%H")'.tar.gz'
     #archive="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d")'.tar.gz'
@@ -60,18 +59,19 @@ tarFunction() {
 }
 
 
-# Encrypts a file after it has been archived by tar.
+
+encryptFunction () {
+# Encrypts the file archived by tar.
 # Uses tar's output file as source which is placed in the variable $archive.
 # Encryption method used is symmetric OpenSSL.
-encryptFunction () {
     command openssl aes-256-cbc -a -salt -pbkdf2 -in $archive -out $archive.enc
     command rm $archive
     echo "Encryption Successful"
 }
 
-### Checks if the "-d" flag is used. This is for decryption of a encrypted file
-decryptFunction () {
 
+decryptFunction () {
+### Checks if the "-d" flag is used. This is for decryption of a encrypted file
 
 if [[ $FLAG_D ]]; then 
     cd $LDIR
