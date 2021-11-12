@@ -25,8 +25,8 @@ helpFunction () {
 
 
 # Function to archive and compress directories with tar and gzip
-# Source == Directory that should be zipped
-# Archive == Destination Directory
+# No source directory is specified here. The source directory is added in the main script before calling this function.
+# archive == destination directory and name
 
 tarFunction() {
 
