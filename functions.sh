@@ -27,11 +27,11 @@ helpFunction () {
 
 tarFunction() {
 # Function to archive and compress directories with tar and gzip
-# No source directory is specified here. The source directory is added in the main script before calling this function.
-# >> Specify the directory in the main script with the $ARCHSRC variable.
+# Uses the first argument added to the function in the main script as source directory.
 # archive == the archived and compressed file will be placed in this directory.
-                      					  
-    archive="$LDIR"/$HOSTNAME'_'$(date +'(%Y-%m-%d)'"-%H")'.tar.gz'
+    
+    ARCHSRC=$1    # Adds the source directory used to create the archive.
+    archive="$LDIR"/$HOSTNAME'_'$(date +'(%Y-%m-%d)'"-%H")'.tar.gz' # Saves the archive in this directory with the format Hostname_(year_month_day)-hour.tar.gz
     #archive="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d")'.tar.gz'
 
     ## Check if the source directory exist otherwise exit.
