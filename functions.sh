@@ -87,7 +87,7 @@ FILE_QUESTION=0
             ENC_FILES=$(ls -A1 | grep -i .*enc)   
 #            echo $ENC_FILES          
                 if [[  -z $ENC_FILES ]]; then
-                   echo -e "There is no encrypted files in this directory\nChoose another directory\n"
+                   echo -e "There are no encrypted files in this directory\nChoose a different directory\n"
                 else
                     DIR_QUESTION=1
                     while [[ $FILE_QUESTION -lt 1 ]]
