@@ -74,17 +74,44 @@ decryptFunction () {
 ### Checks if the "-d" flag is used. This is for decryption of a encrypted file
 
 if [[ $FLAG_D ]]; then 
-    cd $LDIR
-    ls *.enc
-    read -p "Which file do you want to encrypt?: " LINE
+
+DIR_QUESTION=0
+FILE_QUESTION=0
+
+    while [[ $DIR_QUESTION -lt 1 ]]
+    do
+    echo -e "\nChoose the directory that containts the files you want to encrypt:"
+    read -p "Directory>>  " DDIR
+        if [[ -d $DDIR ]]; then
+            cd $DDIR
+            ENC_FILES=$(ls -A1 | grep -i .*enc)   
+#            echo $ENC_FILES          
+                if [[  -z $ENC_FILES ]]; then
+                   echo -e "There is no encrypted files in this directory\nChoose another directory\n"
+                else
+                    DIR_QUESTION=1
+                    while [[ $FILE_QUESTION -lt 1 ]]
+                    do
+                        echo -e "\nWhich of these files do you want to encrypt?: "
+                        echo -e "$ENC_FILES\n"
+                        read -p "File>> " LINE
+                            if [[ $LINE == *.enc ]]; then
+                                command openssl aes-256-cbc -d -a -salt -pbkdf2 -in $LINE -out ${LINE%.enc}
+                                echo "Decryption Successful"
+                                rm $LINE
+                                FILE_QUESTION=1
+                            else
+                                echo "\nSorry $LINE is not a file encrypted with OpenSSL, Please try again "
+                            fi
+                    done
+                fi
+        else
+            echo "$DDIR Is not a directory, try again"     
+        fi
     
-    if [[ ! -e "$LINE" ]]; then 
-        echo "Input is not a valid file." && exit 1
-    else
-        command openssl aes-256-cbc -d -a -salt -pbkdf2 -in $LINE -out ${LINE%.enc}
-        echo "Decryption Successful"
-        rm $LINE
-    fi
+    done
+
+
 fi
 
 }
