@@ -101,7 +101,7 @@ FILE_QUESTION=0
                                 rm $LINE
                                 FILE_QUESTION=1
                             else
-                                echo "\nSorry $LINE is not a file encrypted with OpenSSL, Please try again "
+                                echo -e "\nSorry $LINE is not a file encrypted with OpenSSL, Please try again "
                             fi
                     done
                 fi
