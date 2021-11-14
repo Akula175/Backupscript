@@ -85,9 +85,9 @@ FILE_QUESTION=0
         if [[ -d $DDIR ]]; then
             cd $DDIR
             ENC_FILES=$(ls -A1 | grep -i .*enc)   
-#            echo $ENC_FILES          
+                     
                 if [[  -z $ENC_FILES ]]; then
-                   echo -e "There are no encrypted files in this directory\nChoose a different directory\n"
+                   echo -e "There is no encrypted files in this directory\nChoose another directory\n"
                 else
                     DIR_QUESTION=1
                     while [[ $FILE_QUESTION -lt 1 ]]
@@ -106,7 +106,7 @@ FILE_QUESTION=0
                     done
                 fi
         else
-            echo "$DDIR Is not a directory, try again"     
+            echo -e "\n$DDIR Is not a directory or it doesn't exist', try again"     
         fi
     
     done
@@ -115,6 +115,8 @@ FILE_QUESTION=0
 fi
 
 }
+
+
 
 # Restore function
 
