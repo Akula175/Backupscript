@@ -88,8 +88,7 @@ fi
 
 if [[ $FLAG_L || $FLAG_E ]]; then
     if [[ -z $2 ]]; then
-        ARCHSRC=$SDIR  # Uses the specified directory as source for tar
-        tarFunction    
+        tarFunction $SDIR    # Runs tarFunction with the source path from the $SDIR variable.
     fi
 fi
 
@@ -110,8 +109,7 @@ decryptFunction
 if [[ $SSH =~ [a-z]@[0-9] ]]; then
     echo "Entered IP address, starting scp"
     rsync -zarvh -e "ssh -i $KEY" $SSH:$SDIR $TEMP
-    ARCHSRC=$TEMP         ## ARCHSRS is used in tarFunction to declare $TEMP
-    tarFunction 
+    tarFunction $TEMP           # Runs tarFunction with the source path from the $TEMP variable.
     rm -rf $TEMP/*
 fi
  
