@@ -7,6 +7,8 @@
 
 LDIR=$HOME/backup
 
+##test
+
 # Variable for Key. Change this if your ssh key is in a different location
 
 KEY=~/.ssh/id_rsa.pub
