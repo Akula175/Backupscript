@@ -1,6 +1,6 @@
 #Planering för script
 
-## Description: 
+## Description:
 
 ## The backup project will consist of a script that backs up data in a directory on a local computer or a remote computer accessed via SSH.
 
@@ -12,7 +12,7 @@
 
 ## Scheduler; backups should be scheduled to be run ahead of time.                  ##DONE##
 
-## Restore; script should be able to restore backups to the original destination.  
+## Restore; script should be able to restore backups to the original destination.
 
 ## Restore test; script should test restores by restoring to a test directory.
 
@@ -25,9 +25,7 @@
 
 ## Things that are left to do;
 
-## Backup test and Restore
-
-## Import functions
+## Backup test
 
 ## Alter code to look better where possible
 
