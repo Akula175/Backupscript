@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#test
+
 # Reads Input from user using flags in this order:
 # "/local/directory" OR "user@server /remote/directory"
 
