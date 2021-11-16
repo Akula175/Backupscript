@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Reads Input from user using flags in this order:
-# "/local/directory" OR "user@server /remote/directory"
-
 source ./functions.sh
 
 LDIR=$HOME/backup            # Variable for local backup folder. Change this if you want the backup to save in a different location
@@ -23,11 +20,11 @@ while [[ ! $# -eq 0 ]]
 do
     case "$1" in
         --help | -h)            # Shows the help menu and exits.
-            helpFunction        
-            exit 0              
+            helpFunction
+            exit 0
             ;;
         --encrypt | -e)         # Activates encryption, requires an argument to the -e flag. If no argument is given then exit.'
-            if [[ ! $2 ]]; then            
+            if [[ ! $2 ]]; then
                 echo 'Please specify the directory you want to back up'
                 exit 1
             else
@@ -36,14 +33,14 @@ do
             fi
             ;;
         --decrypt | -d)         # Activates decryption, opens a prompt where the user can specify which file to decrypt.
-            FLAG_D=$1 
-            
+            FLAG_D=$1
+
             ;;
         --restore | -r)         # Activates restore function
             if [[ $2 ]]; then
                 SDIR=$2
             fi
-            FLAG_R=$1 
+            FLAG_R=$1
             ;;
         --ssh | -s)             # Activates SSH function, uses $KEY for public key and copy files remotely with rsync.
             if [[ "$2" ]]; then
@@ -80,7 +77,7 @@ if [ ! -d $LDIR ]; then
 fi
 
 if [ ! -d $TEMP ]; then
-    mkdir $TEMP 
+    mkdir $TEMP
 fi
 
 # Checks if input is a working Directory
@@ -94,7 +91,7 @@ fi
 
 
 # Activates encryption if "-e" flag is set.
-if [[ $FLAG_E ]]; then 
+if [[ $FLAG_E ]]; then
     encryptFunction
 fi
 
@@ -112,12 +109,12 @@ if [[ $SSH =~ [a-z]@[0-9] ]]; then
     tarFunction $TEMP           # Runs tarFunction with the source path from the $TEMP variable.
     rm -rf $TEMP/*
 fi
- 
+
 
 # Restore prompt
 
-if [[ $FLAG_R ]]; then 
-   if [[ ! -e "$SDIR" ]]; then 
+if [[ $FLAG_R ]]; then
+   if [[ ! -e "$SDIR" ]]; then
         echo "Input is not a valid file." && exit 1
     else
         restoreFunction
