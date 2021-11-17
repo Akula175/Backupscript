@@ -1,6 +1,8 @@
 #!/bin/bash
 
-source ./functions.sh
+WORKINGDIR=$(pwd)
+
+source $WORKINGDIR/functions.sh
 
 LDIR=$HOME/backup            # Variable for local backup folder. Change this if you want the backup to save in a different location
 KEY=~/.ssh/mypubkey.pub      # Variable for Key. Change this if your ssh key is in a different location
