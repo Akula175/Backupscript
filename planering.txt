@@ -12,7 +12,7 @@
 
 ## Scheduler; backups should be scheduled to be run ahead of time.                  ##DONE##
 
-## Restore; script should be able to restore backups to the original destination.
+## Restore; script should be able to restore backups to the original destination.   ##MISSING SSH#
 
 ## Restore test; script should test restores by restoring to a test directory.
 
@@ -20,7 +20,7 @@
 
 ## Encryption; script should support encryption.                                    ##DONE## (but not automated)
 
-## Installation script; create a sepparate script that installs the script in Cron
+## Installation script; create a sepparate script that installs the script in Cron  ##OPTIONAL##
 
 
 ## Things that are left to do;
@@ -30,3 +30,5 @@
 ## Alter code to look better where possible
 
 ## Cron Installer?
+
+## Powerpoint 3-4 slides about experience 
