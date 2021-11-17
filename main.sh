@@ -36,7 +36,6 @@ do
             ;;
         --decrypt | -d)         # Activates decryption, opens a prompt where the user can specify which file to decrypt.
             FLAG_D=$1
-
             ;;
         --restore | -r)         # Activates restore function
             if [[ $2 ]]; then
@@ -59,6 +58,10 @@ do
             fi
             FLAG_L=$1
             ;;
+        --cron | -c)
+            FLAG_C=$1
+            ;;
+            ;;  
     esac
     shift
 done
