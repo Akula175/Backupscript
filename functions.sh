@@ -3,7 +3,7 @@
 ###################
 #                 #
 #    Functions    #
-#                 #  
+#                 #
 ###################
 
 
@@ -29,7 +29,7 @@ tarFunction() {
 # Function to archive and compress directories with tar and gzip
 # Uses the first argument added to the function in the main script as source directory.
 # archive == the archived and compressed file will be placed in this directory.
-    
+
     ARCHSRC=$1    # Adds the source directory used to create the archive.
     archive="$LDIR"/$HOSTNAME'_'$(date +'(%Y-%m-%d)'"-%H")'.tar.gz' # Saves the archive in this directory with the format Hostname_(year_month_day)-hour.tar.gz
     #archive="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d")'.tar.gz'
@@ -73,7 +73,7 @@ encryptFunction () {
 decryptFunction () {
 ### Checks if the "-d" flag is used. This is for decryption of a encrypted file
 
-if [[ $FLAG_D ]]; then 
+if [[ $FLAG_D ]]; then
 
 DIR_QUESTION=0
 FILE_QUESTION=0
@@ -84,8 +84,8 @@ FILE_QUESTION=0
     read -p "Directory>>  " DDIR
         if [[ -d $DDIR ]]; then
             cd $DDIR
-            ENC_FILES=$(ls -A1 | grep -i .*enc)   
-                     
+            ENC_FILES=$(ls -A1 | grep -i .*enc)
+
                 if [[  -z $ENC_FILES ]]; then
                    echo -e "There is no encrypted files in this directory\nChoose another directory\n"
                 else
@@ -106,9 +106,9 @@ FILE_QUESTION=0
                     done
                 fi
         else
-            echo -e "\n$DDIR Is not a directory or it doesn't exist', try again"     
+            echo -e "\n$DDIR Is not a directory or it doesn't exist', try again"
         fi
-    
+
     done
 
 
@@ -121,10 +121,36 @@ fi
 # Restore function
 
 restoreFunction () {
-    tar -xpf $LDIR/$SDIR -C $TEMP
+    tar -xpf $SDIR -C $TEMP
     cd $TEMP
     RSTR=$(cat filedir24)
     rm filedir24
     cp $TEMP/* $RSTR
+
+}
+
+
+# Cronfuntion for cronjob scheduling
+# Reads input from user and echoes the input to Cron via temporary file
+
+cronFuntion () {
+  crontab -l > /tmp/temp/mycron
+  echo "Input Minute, Hour, Day of month, Month and weekday in Crontab syntax"
+  read CRONSYN
+
+  echo "Input location of script followed by scriptfunction"
+  read CRONDIR
+
+  echo
+  echo
+
+  echo "Cronjob to be scheduled: $CRONSYN $CRONDIR"
+
+  echo "$CRONSYN $CRONDIR" >> /tmp/temp/mycron
+
+  crontab /tmp/temp/mycron
+
+  rm /tmp/temp/mycron
+
 
 }
