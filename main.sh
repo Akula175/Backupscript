@@ -61,7 +61,6 @@ do
         --cron | -c)
             FLAG_C=$1
             ;;
-            ;;  
     esac
     shift
 done
