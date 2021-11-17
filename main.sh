@@ -1,8 +1,8 @@
 #!/bin/bash
 
-WORKINGDIR=$(pwd)
+WORKINGDIR=$(pwd)                # Variable for import of functions
 
-source $WORKINGDIR/functions.sh
+source $WORKINGDIR/functions.sh  # Imports the functions file
 
 LDIR=$HOME/backup            # Variable for local backup folder. Change this if you want the backup to save in a different location
 KEY=~/.ssh/mypubkey.pub      # Variable for Key. Change this if your ssh key is in a different location
