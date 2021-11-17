@@ -67,11 +67,11 @@ do
 done
 
 # Checks if rsync is installed otherwise exit
-#rsyncCheck=$(rsync -V 2>/dev/null)
-#if [[ ! $rsyncCheck ]]; then
-#    echo "rsync is not installed"
-#    exit 1
-#fi
+rsyncCheck=$(rsync --version 2>/dev/null)
+if [[ ! $rsyncCheck ]]; then
+    echo "rsync is not installed"
+    exit 1
+fi
 
 
 # Checks if backup Directory exists, otherwise it gets created (silent)
