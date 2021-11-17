@@ -146,7 +146,7 @@ cronFuntion () {
 
   echo "Cronjob to be scheduled: $CRONSYN $CRONDIR"
 
-  echo "$CRONSYN $CRONDIR" > /tmp/temp/mycron
+  echo "$CRONSYN $CRONDIR" >> /tmp/temp/mycron
 
   crontab /tmp/temp/mycron
 
