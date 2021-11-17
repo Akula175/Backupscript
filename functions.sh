@@ -135,14 +135,39 @@ restoreFunction () {
 
 cronFuntion () {
   crontab -l > /tmp/temp/mycron
-  echo "Input Minute, Hour, Day of month, Month and weekday in Crontab syntax"
-  read CRONSYN
+  DATE_CRON=0
+  LOCAL_CRON=0
+    while [[ $DATE_CRON -eq 0 ]]
+    do
+        echo "Input Minute, Hour, Day of month, Month and weekday in Crontab syntax"
+        read -p "crontime>> " CRONSYN
+            if [[ $CRONSYN =~ [0-9\*/] ]]; then
+                DATE_CRON=1
+            else
+                echo -e "\nYour input is not valid, please try again"
+            fi
+    done
+  
+  while [[ $LOCAL_CRON -eq 0 ]]    
+  do      
+    echo -e "\nChoose between adding an entry in crontab locally or remotely"
+    echo "For locally choose[L], For remotely choose[R]"
+        read -p "crontime>> " -n 1 -r
+            case $REPLY in
+                l | L)
+                    LOC_CRON="$PWD/main.sh -l"
+                    LOCAL_CRON=1
+                ;;
+                r | R)
+                   REM_CRON="$PWD/main.sh -r"
+                    LOCAL_CRON=1
+                ;;
+                *)
+                   echo -e "\n$REPLY is not a valid answer, choose [L] or [R]"
+                ;;
+            esac
 
-  echo "Input location of script followed by scriptfunction"
-  read CRONDIR
-
-  echo
-  echo
+  done
 
   echo "Cronjob to be scheduled: $CRONSYN $CRONDIR"
 
