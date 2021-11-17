@@ -107,6 +107,7 @@ decryptFunction
 # Activates Cron scheduling if "-c" flag is set.
 if [[ $FLAG_C ]]; then
   cronFuntion
+fi
 
 
 # Checks if input is an IP addr
