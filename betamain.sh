@@ -1,9 +1,8 @@
 #!/bin/bash
 
-# Reads Input from user using flags in this order:
-# "/local/directory" OR "user@server /remote/directory"
+WORKINGDIR=$(pwd)                # Variable for import of functions
 
-source ./functions.sh
+source $WORKINGDIR/functions.sh  # Imports the functions file
 
 LDIR=$HOME/backup            # Variable for local backup folder. Change this if you want the backup to save in a different location
 KEY=~/.ssh/mypubkey.pub      # Variable for Key. Change this if your ssh key is in a different location
@@ -23,11 +22,11 @@ while [[ ! $# -eq 0 ]]
 do
     case "$1" in
         --help | -h)            # Shows the help menu and exits.
-            helpFunction        
-            exit 0              
+            helpFunction
+            exit 0
             ;;
         --encrypt | -e)         # Activates encryption, requires an argument to the -e flag. If no argument is given then exit.'
-            if [[ ! $2 ]]; then            
+            if [[ ! $2 ]]; then
                 echo 'Please specify the directory you want to back up'
                 exit 1
             else
@@ -36,14 +35,13 @@ do
             fi
             ;;
         --decrypt | -d)         # Activates decryption, opens a prompt where the user can specify which file to decrypt.
-            FLAG_D=$1 
-            
+            FLAG_D=$1
             ;;
         --restore | -r)         # Activates restore function
             if [[ $2 ]]; then
                 SDIR=$2
             fi
-            FLAG_R=$1 
+            FLAG_R=$1
             ;;
         --ssh | -s)             # Activates SSH function, uses $KEY for public key and copy files remotely with rsync.
             if [[ "$2" ]]; then
@@ -60,12 +58,15 @@ do
             fi
             FLAG_L=$1
             ;;
+        --cron | -c)
+            FLAG_C=$1
+            ;;
     esac
     shift
 done
 
 # Checks if rsync is installed otherwise exit
-rsyncCheck=$(rsync -V 2>/dev/null)
+rsyncCheck=$(rsync --version 2>/dev/null)
 if [[ ! $rsyncCheck ]]; then
     echo "rsync is not installed"
     exit 1
@@ -80,7 +81,7 @@ if [ ! -d $LDIR ]; then
 fi
 
 if [ ! -d $TEMP ]; then
-    mkdir $TEMP 
+    mkdir $TEMP
 fi
 
 # Checks if input is a working Directory
@@ -94,13 +95,20 @@ fi
 
 
 # Activates encryption if "-e" flag is set.
-if [[ $FLAG_E ]]; then 
+if [[ $FLAG_E ]]; then
     encryptFunction
 fi
 
 
 ## Activates decryption if "-d" flag is set.
 decryptFunction
+
+
+# Activates Cron scheduling if "-c" flag is set.
+if [[ $FLAG_C ]]; then
+  cronFuntion
+fi
+
 
 # Checks if input is an IP addr
 # If valid IP, begins scp or Rsync
@@ -112,12 +120,12 @@ if [[ $SSH =~ [a-z]@[0-9] ]]; then
     tarFunction $TEMP           # Runs tarFunction with the source path from the $TEMP variable.
     rm -rf $TEMP/*
 fi
- 
+
 
 # Restore prompt
 
-if [[ $FLAG_R ]]; then 
-   if [[ ! -e "$SDIR" ]]; then 
+if [[ $FLAG_R ]]; then
+   if [[ ! -e "$SDIR" ]]; then
         echo "Input is not a valid file." && exit 1
     else
         restoreFunction
