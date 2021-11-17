@@ -130,6 +130,8 @@ restoreFunction () {
 }
 
 
+# Cronfuntion for cronjob scheduling
+# Reads input from user and echoes the input to Cron via temporary file
 
 cronFuntion () {
   crontab -l > /tmp/temp/mycron
