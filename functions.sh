@@ -134,7 +134,8 @@ restoreFunction () {
 # Reads input from user and echoes the input to Cron via temporary file
 
 cronFuntion () {
-  crontab -l > /tmp/temp/mycron
+  MYCRON=/tmp/temp/mycron
+  crontab -l > $MYCRON
   DATE_CRON=0
   LOCAL_CRON=0
     while [[ $DATE_CRON -eq 0 ]]
@@ -152,14 +153,14 @@ cronFuntion () {
   do      
     echo -e "\nChoose between adding an entry in crontab locally or remotely"
     echo "For locally choose[L], For remotely choose[R]"
-        read -p "crontime>> " -n 1 -r
+        read -p "crontime>> " -n 1
             case $REPLY in
                 l | L)
-                    LOC_CRON="$PWD/main.sh -l"
+                    CRONDIR="$PWD/main.sh --local"
                     LOCAL_CRON=1
                 ;;
                 r | R)
-                   REM_CRON="$PWD/main.sh -r"
+                   CRONDIR="$PWD/main.sh --ssh"
                     LOCAL_CRON=1
                 ;;
                 *)
@@ -168,14 +169,14 @@ cronFuntion () {
             esac
 
   done
+    
 
-  echo "Cronjob to be scheduled: $CRONSYN $CRONDIR"
+  echo -e  "\nCronjob to be scheduled: $CRONSYN $CRONDIR"
 
-  echo "$CRONSYN $CRONDIR" >> /tmp/temp/mycron
+  echo "$CRONSYN $CRONDIR" >> $MYCRON
 
-  crontab /tmp/temp/mycron
+  crontab $MYCRON
 
-  rm /tmp/temp/mycron
-
-
-}
+  rm $MYCRON
+  
+  }
