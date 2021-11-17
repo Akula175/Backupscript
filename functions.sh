@@ -128,3 +128,27 @@ restoreFunction () {
     cp $TEMP/* $RSTR
 
 }
+
+
+
+cronFuntion () {
+  crontab -l > /tmp/temp/mycron
+  echo "Input Minute, Hour, Day of month, Month and weekday in Crontab syntax"
+  read CRONSYN
+
+  echo "Input location of script followed by scriptfunction"
+  read CRONDIR
+
+  echo
+  echo
+
+  echo "Cronjob to be scheduled: $CRONSYN $CRONDIR"
+
+  echo "$CRONSYN $CRONDIR" > /tmp/temp/mycron
+
+  crontab /tmp/temp/mycron
+
+  rm /tmp/temp/mycron
+
+
+}

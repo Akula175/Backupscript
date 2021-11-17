@@ -103,6 +103,12 @@ fi
 ## Activates decryption if "-d" flag is set.
 decryptFunction
 
+
+# Activates Cron scheduling if "-c" flag is set.
+if [[ $FLAG_C ]]; then
+  cronFuntion
+
+
 # Checks if input is an IP addr
 # If valid IP, begins scp or Rsync
 
