@@ -156,11 +156,11 @@ cronFuntion () {
         read -p "crontime>> " -n 1
             case $REPLY in
                 l | L)
-                    CRONSYN="$PWD/main.sh --local"
+                    CRONDIR="$PWD/main.sh --local"
                     LOCAL_CRON=1
                 ;;
                 r | R)
-                   CRONSYN="$PWD/main.sh --ssh"
+                   CRONDIR="$PWD/main.sh --ssh"
                     LOCAL_CRON=1
                 ;;
                 *)
@@ -173,15 +173,15 @@ cronFuntion () {
   while [[ $DIRECTION -eq 0 ]]
   do
     echo -e "\nInput Local Directory or USR@IP Directory for remote: "
-    read CRONDIR
+    read CRONDIR2
     DIRECTION=1
 
 done
 
 
-  echo -e  "\nCronjob to be scheduled: $CRONSYN $CRONDIR"
+  echo -e  "\nCronjob to be scheduled: $CRONSYN $CRONDIR $CRONDIR2"
 
-  echo "$CRONSYN $CRONDIR" >> $MYCRON
+  echo "$CRONSYN $CRONDIR $CRONDIR2" >> $MYCRON
 
   crontab $MYCRON
 
