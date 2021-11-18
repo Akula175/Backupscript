@@ -172,12 +172,12 @@ cronFuntion () {
 
   while [[ $DIRECTION -eq 0 ]]
   do
-    echo -e "\nInput Local Directory or USR@IP Directory for remote"
+    echo -e "\nInput Local Directory or USR@IP Directory for remote: "
     read CRONDIR
     DIRECTION=1
 
 done
-    
+
 
   echo -e  "\nCronjob to be scheduled: $CRONSYN $CRONDIR"
 
