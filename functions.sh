@@ -148,19 +148,19 @@ cronFuntion () {
                 echo -e "\nYour input is not valid, please try again"
             fi
     done
-  
-  while [[ $LOCAL_CRON -eq 0 ]]    
-  do      
+
+  while [[ $LOCAL_CRON -eq 0 ]]
+  do
     echo -e "\nChoose between adding an entry in crontab locally or remotely"
     echo "For locally choose[L], For remotely choose[R]"
         read -p "crontime>> " -n 1
             case $REPLY in
                 l | L)
-                    CRONDIR="$PWD/main.sh --local"
+                    CRONSYN="$PWD/main.sh --local"
                     LOCAL_CRON=1
                 ;;
                 r | R)
-                   CRONDIR="$PWD/main.sh --ssh"
+                   CRONSYN="$PWD/main.sh --ssh"
                     LOCAL_CRON=1
                 ;;
                 *)
@@ -169,6 +169,14 @@ cronFuntion () {
             esac
 
   done
+
+  while [[ $DIRECTION -eq 0 ]]
+  do
+    echo -e "\nInput Local Directory or USR@IP Directory for remote"
+    read CRONDIR
+    DIRECTION=1
+
+done
     
 
   echo -e  "\nCronjob to be scheduled: $CRONSYN $CRONDIR"
@@ -178,5 +186,5 @@ cronFuntion () {
   crontab $MYCRON
 
   rm $MYCRON
-  
+
   }
