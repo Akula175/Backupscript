@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WORKINGDIR=$(pwd)                # Variable for import of functions
+WORKINGDIR=$(pwd)                # Variable for import of functions. This is where the script is located
 
 source $WORKINGDIR/functions.sh  # Imports the functions file
 
