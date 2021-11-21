@@ -43,7 +43,7 @@ do
             fi
             FLAG_R=$1
             ;;
-        --remote-ssh | -rs)   # Aktivates restore remote function.
+        --restore-ssh | -rs)   # Activates restore remote function.
             if [[ $2 ]]; then
                 SDIR=$2
             fi
