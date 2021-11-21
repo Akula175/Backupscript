@@ -61,7 +61,7 @@ do
                 exit 1
             fi      
             ;;
-        --ssh-sudo | -ss)       # Runs rsync as sudo over SSH. Requires that rsync is able to run as sudo without password on the destination.
+        --ssh-sudo | -ss)       # Runs rsync as sudo over SSH. Requires that rsync is able to run as sudo without password on the remote host.
             if [[ $2 ]]; then
                 SSH=$2
                 if [[ $3 ]]; then
@@ -128,9 +128,8 @@ if [[ $FLAG_C ]]; then
 fi
 
 
-# Checks if input is an IP addr
-# If valid IP, begins scp or Rsync
 
+# Creates backup with rsync through ssh.
 if [[ $FLAG_S ]]; then
     echo "Entered IP address, starting scp"
     rsync -zarvh -e "ssh -i $KEY" $SSH:$SDIR $TEMP
@@ -138,6 +137,9 @@ if [[ $FLAG_S ]]; then
     rm -rf $TEMP/*
 fi
 
+
+# Creates backup with rsync through ssh.
+# Trys to run rsync with sudo privileges on the remote host.
 if [[ $FLAG_SS ]]; then
     echo "Entered IP address, starting scp"
     rsync -zarvh -e "ssh -i $KEY" $SSH:$SDIR $TEMP --rsync-path="sudo rsync"
