@@ -128,14 +128,14 @@ restoreFunction () {
     case $RESTORE in
         1 ) echo "Restoring to $RSTR"
             rm filedir24
-            rsync -auv $TEMP/* $RSTR;;
+            rsync -av $TEMP/* $RSTR;;
         2 ) echo "Enter Directory to restore to: "
             read CUSTOM
             if [[ ! -d $CUSTOM ]]; then
                 echo "Input Directory is not valid, please try again." && exit 1
             else
                 rm filedir24
-                rsync -auv $TEMP/* $CUSTOM
+                rsync -av $TEMP/* $CUSTOM
             fi;;
     esac
 
