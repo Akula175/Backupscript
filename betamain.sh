@@ -5,7 +5,7 @@ WORKINGDIR=$(pwd)                # Variable for import of functions. This is whe
 source $WORKINGDIR/functions.sh  # Imports the functions file
 
 LDIR=$HOME/backup            # Variable for local backup folder. Change this if you want the backup to save in a different location
-KEY=~/.ssh/myprivkey      # Variable for Key. Change this if your ssh key is in a different location
+KEY=~/.ssh/myprivkey         # Variable for Key. Change this if your ssh key is in a different location
 TEMP=/tmp/temp               # Variable for TEMP location
 
 
@@ -49,7 +49,7 @@ do
             fi
             FLAG_RS=$1
             ;;
-        --ssh | -s)             # Activates SSH function, uses $KEY for public key and copy files remotely with rsync.
+        --ssh | -s)            # Activates SSH function, uses $KEY for public key and copy files remotely with rsync.
             if [[ ${2} =~ [a-z]@[0-9] ]]; then
                 SSH=$2
                 if [[ "$3" ]]; then
@@ -139,7 +139,7 @@ fi
 
 
 # Creates backup with rsync through ssh.
-# Trys to run rsync with sudo privileges on the remote host.
+# Tries to run rsync with sudo privileges on the remote host.
 if [[ $FLAG_SS ]]; then
     echo "Entered IP address, starting scp"
     rsync -zarvh -e "ssh -i $KEY" $SSH:$SDIR $TEMP --rsync-path="sudo rsync"
