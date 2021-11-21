@@ -5,7 +5,7 @@ WORKINGDIR=$(pwd)                # Variable for import of functions. This is whe
 source $WORKINGDIR/functions.sh  # Imports the functions file
 
 LDIR=$HOME/backup            # Variable for local backup folder. Change this if you want the backup to save in a different location
-KEY=~/.ssh/mypubkey.pub      # Variable for Key. Change this if your ssh key is in a different location
+KEY=~/.ssh/myprivkey      # Variable for Key. Change this if your ssh key is in a different location
 TEMP=/tmp/temp               # Variable for TEMP location
 
 
@@ -43,14 +43,32 @@ do
             fi
             FLAG_R=$1
             ;;
+        --remote-ssh | -rs)   # Aktivates restore remote function.
+            if [[ $2 ]]; then
+                SDIR=$2
+            fi
+            FLAG_RS=$1
+            ;;
         --ssh | -s)             # Activates SSH function, uses $KEY for public key and copy files remotely with rsync.
-            if [[ "$2" ]]; then
+            if [[ ${2} =~ [a-z]@[0-9] ]]; then
                 SSH=$2
                 if [[ "$3" ]]; then
                     SDIR=$3
+                    FLAG_S=$1
+                fi
+            else
+                echo -e "\n$2 is not valid, please use the syntax username@ipadress\n\n"
+                exit 1
+            fi      
+            ;;
+        --ssh-sudo | -ss)       # Runs rsync as sudo over SSH. Requires that rsync is able to run as sudo without password on the destination.
+            if [[ $2 ]]; then
+                SSH=$2
+                if [[ $3 ]]; then
+                    SDIR=$3
                 fi
             fi
-            FLAG_S=$1
+            FLAG_SS=$1
             ;;
         --local | -l)           # Used for local backup, requires the backup directory to be specified.
             if [[ "$2" ]]; then
@@ -113,10 +131,16 @@ fi
 # Checks if input is an IP addr
 # If valid IP, begins scp or Rsync
 
-
-if [[ $SSH =~ [a-z]@[0-9] ]]; then
+if [[ $FLAG_S ]]; then
     echo "Entered IP address, starting scp"
     rsync -zarvh -e "ssh -i $KEY" $SSH:$SDIR $TEMP
+    tarFunction $TEMP           # Runs tarFunction with the source path from the $TEMP variable.
+    rm -rf $TEMP/*
+fi
+
+if [[ $FLAG_SS ]]; then
+    echo "Entered IP address, starting scp"
+    rsync -zarvh -e "ssh -i $KEY" $SSH:$SDIR $TEMP --rsync-path="sudo rsync"
     tarFunction $TEMP           # Runs tarFunction with the source path from the $TEMP variable.
     rm -rf $TEMP/*
 fi
