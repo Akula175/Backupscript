@@ -42,9 +42,7 @@ tarFunction() {
     elif [[ ! -d $ARCHSRC ]]; then
         echo "$ARCHSRC doesn't exist" && exit 1
     else
-        echo $ARCHSRC > $ARCHSRC/./filedir24
         tar -cvzf $archive -C $ARCHSRC . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
-        rm $ARCHSRC/./filedir24
     fi
 
 
@@ -126,6 +124,20 @@ restoreFunction () {
     RSTR=$(cat filedir24)
     rm filedir24
     cp $TEMP/* $RSTR
+
+}
+
+
+# Remote restore function
+
+remoterestoreFunction () {
+    tar -xpf $SDIR -C $TEMP
+    cd $TEMP
+    RSTRSSH=$(cat filedir24)
+    rm filedir24
+    rsync -zarvh $TEMP/* $RSTRSSH
+    echo "$SDIR and $TEMP"
+    echo "also $RSTRSSH"
 
 }
 

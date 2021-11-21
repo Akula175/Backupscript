@@ -1,5 +1,5 @@
 #!/bin/bash
-##TEST PUSH
+
 WORKINGDIR=$(pwd)                # Variable for import of functions. This is where the script is located
 
 source $WORKINGDIR/functions.sh  # Imports the functions file
@@ -61,6 +61,11 @@ do
         --cron | -c)
             FLAG_C=$1
             ;;
+        --rremote | -rs)
+            if [[ $2 ]]; then
+                SDIR=$2
+            fi
+            FLAG_RS=$1
     esac
     shift
 done
@@ -89,7 +94,9 @@ fi
 
 if [[ $FLAG_L || $FLAG_E ]]; then
     if [[ -z $2 ]]; then
+        echo $SDIR > $SDIR/./filedir24
         tarFunction $SDIR    # Runs tarFunction with the source path from the $SDIR variable.
+        rm $SDIR/./filedir24
     fi
 fi
 
@@ -117,6 +124,7 @@ fi
 if [[ $SSH =~ [a-z]@[0-9] ]]; then
     echo "Entered IP address, starting scp"
     rsync -zarvh -e "ssh -i $KEY" $SSH:$SDIR $TEMP
+    echo $SSH:$SDIR > $TEMP/./filedir24
     tarFunction $TEMP           # Runs tarFunction with the source path from the $TEMP variable.
     rm -rf $TEMP/*
 fi
@@ -134,3 +142,10 @@ if [[ $FLAG_R ]]; then
 fi
 
 echo "Finished in $SECONDS seconds"
+
+
+# Remote Restore
+
+if [[ $FLAG_RS  ]]; then
+    remoterestoreFunction
+fi
