@@ -58,10 +58,10 @@ do
             fi
             FLAG_L=$1
             ;;
-        --cron | -c)
+        --cron | -c)            # Used to schedule backups with cron
             FLAG_C=$1
             ;;
-        --rremote | -rs)
+        --rremote | -rs)        # Used to restore backup to a remote server via ssh
             if [[ $2 ]]; then
                 SDIR=$2
             fi
@@ -130,7 +130,7 @@ if [[ $SSH =~ [a-z]@[0-9] ]]; then
 fi
 
 
-# Restore prompt
+# Activates restore if the "-r" flag is set.
 
 if [[ $FLAG_R ]]; then
    if [[ ! -e "$SDIR" ]]; then
@@ -141,11 +141,12 @@ if [[ $FLAG_R ]]; then
     fi
 fi
 
-echo "Finished in $SECONDS seconds"
 
-
-# Remote Restore
+# Activates remote restore if "-rs" flag is set.
 
 if [[ $FLAG_RS  ]]; then
     remoterestoreFunction
 fi
+
+
+echo "Finished in $SECONDS seconds"

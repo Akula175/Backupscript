@@ -117,6 +117,8 @@ fi
 
 
 # Restore function
+# Takes the input from User and prompts user to either restore the contents of .tar file to the origin or to a custom location.
+# Uses the $TEMP directory as a buffer to place files in and then copies the contents to users choice
 
 restoreFunction () {
     clear
@@ -143,6 +145,7 @@ restoreFunction () {
 
 
 # Remote restore function
+# Used when the user wants to restore a backup to a remote server. In this case, the contents of "filedir24" should have user@ip.
 
 remoterestoreFunction () {
     tar -xpf $SDIR -C $TEMP
@@ -154,8 +157,8 @@ remoterestoreFunction () {
 }
 
 
-# Cronfuntion for cronjob scheduling
-# Reads input from user and echoes the input to Cron via temporary file
+# Cronfuntion for cronjob scheduling.
+# Reads input from user and echoes the input to Cron via temporary file.
 
 cronFuntion () {
   MYCRON=/tmp/temp/mycron
