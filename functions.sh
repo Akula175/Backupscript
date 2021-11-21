@@ -119,11 +119,25 @@ fi
 # Restore function
 
 restoreFunction () {
+    clear
     tar -xpf $SDIR -C $TEMP
     cd $TEMP
     RSTR=$(cat filedir24)
-    rm filedir24
-    cp $TEMP/* $RSTR
+    echo "Press 1 to restore to $RSTR or 2 to restore to custom Directory"
+    read RESTORE
+    case $RESTORE in
+        1 ) echo "Restoring to $RSTR"
+            rm filedir24
+            rsync -auv $TEMP/* $RSTR;;
+        2 ) echo "Enter Directory to restore to: "
+            read CUSTOM
+            if [[ ! -d $CUSTOM ]]; then
+                echo "Input Directory is not valid, please try again." && exit 1
+            else
+                rm filedir24
+                rsync -auv $TEMP/* $CUSTOM
+            fi;;
+    esac
 
 }
 
