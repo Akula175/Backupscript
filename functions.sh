@@ -136,8 +136,6 @@ remoterestoreFunction () {
     RSTRSSH=$(cat filedir24)
     rm filedir24
     rsync -zarvh $TEMP/* $RSTRSSH
-    echo "$SDIR and $TEMP"
-    echo "also $RSTRSSH"
 
 }
 
