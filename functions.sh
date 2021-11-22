@@ -161,13 +161,13 @@ remoterestoreFunction () {
     case $RESTORE in
         1 ) echo "Restoring to $RSTRSSH"
             rm filedir24
-            rsync -zarvh $TEMP/* $RSTRSSH;;
+            rsync -zarvh -e "ssh -i $KEY" $TEMP/* $RSTRSSH;;
         2 ) echo "Enter usr@server destination: "
             read -p "Server>> " SERVER
             echo "Enter Remote Directory"
             read -p "Remote Directory>> " RMDIR
                 rm filedir24
-                rsync -zarvh $TEMP/* $SERVER:$RMDIR;;
+                rsync -zarvh -e "ssh -i $KEY" $TEMP/* $SERVER:$RMDIR;;
     esac
     
 }
