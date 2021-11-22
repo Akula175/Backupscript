@@ -42,9 +42,7 @@ tarFunction() {
     elif [[ ! -d $ARCHSRC ]]; then
         echo "$ARCHSRC doesn't exist" && exit 1
     else
-        echo $ARCHSRC > $ARCHSRC/./filedir24
         tar -cvzf $archive -C $ARCHSRC . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
-        rm $ARCHSRC/./filedir24
     fi
 
 
@@ -119,19 +117,48 @@ fi
 
 
 # Restore function
+# Takes the input from User and prompts user to either restore the contents of .tar file to the origin or to a custom location.
+# Uses the $TEMP directory as a buffer to place files in and then copies the contents to users choice
 
 restoreFunction () {
+    clear
     tar -xpf $SDIR -C $TEMP
     cd $TEMP
     RSTR=$(cat filedir24)
-    rm filedir24
-    cp $TEMP/* $RSTR
+    echo "Press 1 to restore to $RSTR or 2 to restore to custom Directory"
+    read -p "1 or 2 & ENTER>> " RESTORE
+    case $RESTORE in
+        1 ) echo "Restoring to $RSTR"
+            rm filedir24
+            rsync -av $TEMP/* $RSTR;;
+        2 ) echo "Enter Directory to restore to: "
+            read -p "Directory>> " CUSTOM
+            if [[ ! -d $CUSTOM ]]; then
+                echo "Input Directory is not valid, please try again." && exit 1
+            else
+                rm filedir24
+                rsync -av $TEMP/* $CUSTOM
+            fi;;
+    esac
 
 }
 
 
-# Cronfuntion for cronjob scheduling
-# Reads input from user and echoes the input to Cron via temporary file
+# Remote restore function
+# Used when the user wants to restore a backup to a remote server. In this case, the contents of "filedir24" should have user@ip.
+
+remoterestoreFunction () {
+    tar -xpf $SDIR -C $TEMP
+    cd $TEMP
+    RSTRSSH=$(cat filedir24)
+    rm filedir24
+    rsync -zarvh $TEMP/* $RSTRSSH
+
+}
+
+
+# Cronfuntion for cronjob scheduling.
+# Reads input from user and echoes the input to Cron via temporary file.
 
 cronFuntion () {
   MYCRON=/tmp/temp/mycron
@@ -141,7 +168,7 @@ cronFuntion () {
     while [[ $DATE_CRON -eq 0 ]]
     do
         echo "Input Minute, Hour, Day of month, Month and weekday in Crontab syntax"
-        read -p "crontime>> " CRONSYN
+        read -p "Crontime>> " CRONSYN
             if [[ $CRONSYN =~ [0-9\*/] ]]; then
                 DATE_CRON=1
             else
@@ -153,7 +180,7 @@ cronFuntion () {
   do
     echo -e "\nChoose between adding an entry in crontab locally or remotely"
     echo "For locally choose[L], For remotely choose[R]"
-        read -p "crontime>> " -n 1
+        read -p "Crontime>> " -n 1
             case $REPLY in
                 l | L)
                     CRONDIR="$PWD/main.sh --local"
@@ -173,7 +200,7 @@ cronFuntion () {
   while [[ $DIRECTION -eq 0 ]]
   do
     echo -e "\nInput Local Directory or USR@IP Directory for remote: "
-    read CRONDIR2
+    read -p "Input & ENTER>> " CRONDIR2
     DIRECTION=1
 
 done
