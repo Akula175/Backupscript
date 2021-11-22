@@ -31,7 +31,7 @@ tarFunction() {
 # archive == the archived and compressed file will be placed in this directory.
 
     ARCHSRC=$1    # Adds the source directory used to create the archive.
-    archive="$LDIR"/$HOSTNAME'_'$(date +'(%Y-%m-%d)'"-%H")'.tar.gz' # Saves the archive in this directory with the format Hostname_(year_month_day)-hour.tar.gz
+    archive="$LDIR"/$HOSTNAME'_'$(date +'(%Y-%m-%d)'"-%H-%M")'.tar.gz' # Saves the archive in this directory with the format Hostname_(year_month_day)-hour.tar.gz
     #archive="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d")'.tar.gz'
 
     ## Check if the source directory exist otherwise exit.
