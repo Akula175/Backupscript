@@ -33,33 +33,33 @@ tarFunction() {
 # Uses the first argument added to the function in the main script as source directory.
 # archive == the archived and compressed file will be placed in this directory.
 
-    ARCHSRC=$1    # Adds the source directory used to create the archive.
-    fileName="$LDIR"/$HOSTNAME'_'$(date +'(%Y-%m-%d)_') # Saves the archive in this directory with the format Hostname_(year_month_day)_(x).tar.gz
-    number=0
-    archive=$fileName.tar.gz
-    while [ -e "$archive" ]; do
-        printf -v archive '%s%03d.tar.gz' "$fileName" "$(( ++number ))"   
-    done
+ARCHSRC=$1    # Adds the source directory used to create the archive.
+fileName="$LDIR"/$HOSTNAME'_'$(date +'(%Y-%m-%d)_') # Saves the archive in this directory with the format Hostname_(year_month_day)-hour-minute.tar.gz
+number=1
+archive=$fileName'001'.tar.gz
+while [ -e "$archive" ]; do
+    printf -v archive '%s%03d.tar.gz' "$fileName" "$(( ++number ))"   
+done
     
-    ## Check if the source directory exist otherwise exit.
-    ## if the source directory exist, create the archive.
+## Check if the source directory exist otherwise exit.
+## if the source directory exist, create the archive.
 
-    if [[ -z $ARCHSRC ]]; then
-        echo "Source directory is empty" && exit 1
-    elif [[ ! -d $ARCHSRC ]]; then
-        echo "$ARCHSRC doesn't exist" && exit 1
-    else
-        tar -cvzf $archive -C $ARCHSRC . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
-    fi
+if [[ -z $ARCHSRC ]]; then
+    echo "Source directory is empty" && exit 1
+elif [[ ! -d $ARCHSRC ]]; then
+    echo "$ARCHSRC doesn't exist" && exit 1
+else
+    tar -cvzf $archive -C $ARCHSRC . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
+fi
 
 
-    ## Check if CHECKSUM is correct
+## Check if CHECKSUM is correct
 
-    if [[ -f $archive.CHECKSUM ]]; then
-        command sha512sum -c $archive.CHECKSUM >/dev/null 2>&1 && echo success || echo failed
-    else
-        echo "The archive file and checksum file doesn't match" && exit 1
-    fi
+if [[ -f $archive.CHECKSUM ]]; then
+    command sha512sum -c $archive.CHECKSUM >/dev/null 2>&1 && echo success || echo failed
+else
+    echo "The archive file and checksum file doesn't match" && exit 1
+fi
 
 }
 
