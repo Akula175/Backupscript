@@ -136,6 +136,7 @@ fi
 # Creates backup with rsync through ssh.
 if [[ $FLAG_S ]]; then
     echo "Entered IP address, starting scp"
+    HOSTNAME=$(ssh -i $KEY $SSH echo '$HOSTNAME')
     rsync -zarvh -e "ssh -i $KEY" $SSH:$SDIR $TEMP
     echo $SSH:$SDIR > $TEMP/./filedir24
     tarFunction $TEMP           # Runs tarFunction with the source path from the $TEMP variable.
