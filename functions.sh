@@ -126,13 +126,13 @@ restoreFunction () {
     cd $TEMP
     RSTR=$(cat filedir24)
     echo "Press 1 to restore to $RSTR or 2 to restore to custom Directory"
-    read RESTORE
+    read -p "1 or 2 & ENTER>> " RESTORE
     case $RESTORE in
         1 ) echo "Restoring to $RSTR"
             rm filedir24
             rsync -av $TEMP/* $RSTR;;
         2 ) echo "Enter Directory to restore to: "
-            read CUSTOM
+            read -p "Directory>> " CUSTOM
             if [[ ! -d $CUSTOM ]]; then
                 echo "Input Directory is not valid, please try again." && exit 1
             else
@@ -168,7 +168,7 @@ cronFuntion () {
     while [[ $DATE_CRON -eq 0 ]]
     do
         echo "Input Minute, Hour, Day of month, Month and weekday in Crontab syntax"
-        read -p "crontime>> " CRONSYN
+        read -p "Crontime>> " CRONSYN
             if [[ $CRONSYN =~ [0-9\*/] ]]; then
                 DATE_CRON=1
             else
@@ -180,7 +180,7 @@ cronFuntion () {
   do
     echo -e "\nChoose between adding an entry in crontab locally or remotely"
     echo "For locally choose[L], For remotely choose[R]"
-        read -p "crontime>> " -n 1
+        read -p "Crontime>> " -n 1
             case $REPLY in
                 l | L)
                     CRONDIR="$PWD/main.sh --local"
@@ -200,7 +200,7 @@ cronFuntion () {
   while [[ $DIRECTION -eq 0 ]]
   do
     echo -e "\nInput Local Directory or USR@IP Directory for remote: "
-    read CRONDIR2
+    read -p "Input & ENTER>> " CRONDIR2
     DIRECTION=1
 
 done
