@@ -15,12 +15,15 @@ helpFunction () {
     printf "Usage:\n\n $SCRIPTNAME [options] file\n $SCRIPTNAME [options]\n\n"
     printf \
     "Options: \n\
-    -h  --help     <file>         Shows this help
-    -e  --encrypt  <file>         Encrypts the file\n\n\
-    -d  --decrypt  <file>         Decrypts a file based on first arg w/o arg user gets promopted\n\
-    -r  --restore  <file>         Restores files based on first arg w/o arg user gets promopted\n\n\
-    -s --ssh       <usr@server>   Starts the rsync process for backing up remote files\n\
-    -l --local     <file>         Starts the backup process with tar locally\n\n"
+    -h  --help                                     Shows this help
+    -e  --encrypt      <directory>                 Encrypts the file\n\n\
+    -d  --decrypt                                  Opens a prompt where user can enter the Directory where encrypted file is located\n\
+    -r  --restore      <file>                      Restores files based on first arg w/o arg user gets promopted\n\n\
+    -s  --ssh          <usr@server>:<directory>    Starts the rsync process for backing up remote files\n\
+    -l  --local        <directory>                 Starts the backup process with tar locally\n\n
+    -c  --cron                                     Opens prompt for scheduled backups
+    -rs --restore-ssh  <file>                      Restores a file to a remote server
+    -ss --ssh-sudo     <usr@server>:<directory>    Starts rsync process with sudo privileges, needs rsync in sudoers file on server"
 }
 
 
@@ -78,19 +81,19 @@ FILE_QUESTION=0
 
     while [[ $DIR_QUESTION -lt 1 ]]
     do
-    echo -e "\nChoose the directory that containts the files you want to encrypt:"
+    echo -e "\nChoose the directory that containts the files you want to decrypt:"
     read -p "Directory>>  " DDIR
         if [[ -d $DDIR ]]; then
             cd $DDIR
             ENC_FILES=$(ls -A1 | grep -i .*enc)
 
                 if [[  -z $ENC_FILES ]]; then
-                   echo -e "There is no encrypted files in this directory\nChoose another directory\n"
+                   echo -e "There are no encrypted files in this directory\nChoose another directory\n"
                 else
                     DIR_QUESTION=1
                     while [[ $FILE_QUESTION -lt 1 ]]
                     do
-                        echo -e "\nWhich of these files do you want to encrypt?: "
+                        echo -e "\nWhich of these files do you want to decrypt?: "
                         echo -e "$ENC_FILES\n"
                         read -p "File>> " LINE
                             if [[ $LINE == *.enc ]]; then
