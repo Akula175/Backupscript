@@ -156,7 +156,7 @@ remoterestoreFunction () {
     tar -xpf $SDIR -C $TEMP
     cd $TEMP
     RSTRSSH=$(cat filedir24)
-    echo "Press 1 to restore to $RSTRSSH or 2 to restore to custom Directory"
+    echo -e "Press 1 to restore to $RSTRSSH or 2 to restore to custom Directory"
     read -p "1 or 2 & ENTER>> " RESTORE
     case $RESTORE in
         1 ) echo "Restoring to $RSTRSSH"
@@ -200,11 +200,16 @@ cronFuntion () {
             case $REPLY in
                 l | L)
                     CRONDIR="$PWD/main.sh --local"
+                    echo -e "\nEnter Local Directory to backup: "
+                    read -p "Directory>> " CRONDIR2
                     LOCAL_CRON=1
+
                 ;;
                 r | R)
                    CRONDIR="$PWD/main.sh --ssh"
-                    LOCAL_CRON=1
+                   echo -e "\nEnter USR@IP followed by Remote Directory"
+                   read -p "USR@IP & Directory>> " CRONDIR2
+                   LOCAL_CRON=1
                 ;;
                 *)
                    echo -e "\n$REPLY is not a valid answer, choose [L] or [R]"
@@ -213,13 +218,6 @@ cronFuntion () {
 
   done
 
-  while [[ $DIRECTION -eq 0 ]]
-  do
-    echo -e "\nInput Local Directory or USR@IP Directory for remote: "
-    read -p "Input & ENTER>> " CRONDIR2
-    DIRECTION=1
-
-done
 
 
   echo -e  "\nCronjob to be scheduled: $CRONSYN $CRONDIR $CRONDIR2"
