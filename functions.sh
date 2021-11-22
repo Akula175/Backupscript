@@ -129,12 +129,12 @@ restoreFunction () {
     cd $TEMP
     RSTR=$(cat filedir24)
     echo "Press 1 to restore to $RSTR or 2 to restore to custom Directory"
-    read -p "1 or 2 & ENTER>> " RESTORE
-    case $RESTORE in
+    read -p "1 or 2 & ENTER>> " -n 1
+    case $REPLY in
         1 ) echo "Restoring to $RSTR"
             rm filedir24
             rsync -zarvh $TEMP/* $RSTR;;
-        2 ) echo "Enter Directory to restore to: "
+        2 ) echo -e "\nEnter Directory to restore to: "
             read -p "Directory>> " CUSTOM
             if [[ ! -d $CUSTOM ]]; then
                 echo "Input Directory is not valid, please try again." && exit 1
@@ -157,14 +157,14 @@ remoterestoreFunction () {
     cd $TEMP
     RSTRSSH=$(cat filedir24)
     echo -e "Press 1 to restore to $RSTRSSH or 2 to restore to custom Directory"
-    read -p "1 or 2 & ENTER>> " RESTORE
-    case $RESTORE in
+    read -p "1 or 2 & ENTER>> " -n 1
+    case $REPLY in
         1 ) echo "Restoring to $RSTRSSH"
             rm filedir24
             rsync -zarvh -e "ssh -i $KEY" $TEMP/* $RSTRSSH;;
-        2 ) echo "Enter usr@server destination: "
+        2 ) echo -e "\nEnter usr@server destination: "
             read -p "Server>> " SERVER
-            echo "Enter Remote Directory"
+            echo -e "\nEnter Remote Directory"
             read -p "Remote Directory>> " RMDIR
                 rm filedir24
                 rsync -zarvh -e "ssh -i $KEY" $TEMP/* $SERVER:$RMDIR;;
