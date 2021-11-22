@@ -22,7 +22,7 @@ helpFunction () {
     -s  --ssh          <usr@server>:<directory>    Starts the rsync process for backing up remote files\n\
     -l  --local        <directory>                 Starts the backup process with tar locally\n\n
     -c  --cron                                     Opens prompt for scheduled backups
-    -rs --restore-ssh  <file>                      Restores a file to a remote server
+    -rs --restore-ssh  <file>                      Restores a file to a remote server. User enters remote server and directory through prompt
     -ss --ssh-sudo     <usr@server>:<directory>    Starts rsync process with sudo privileges, needs rsync in sudoers file on server"
 }
 
