@@ -133,14 +133,15 @@ restoreFunction () {
     case $RESTORE in
         1 ) echo "Restoring to $RSTR"
             rm filedir24
-            rsync -av $TEMP/* $RSTR;;
+            rsync -zarvh $TEMP/* $RSTR;;
         2 ) echo "Enter Directory to restore to: "
             read -p "Directory>> " CUSTOM
             if [[ ! -d $CUSTOM ]]; then
                 echo "Input Directory is not valid, please try again." && exit 1
             else
                 rm filedir24
-                rsync -av $TEMP/* $CUSTOM
+                rsync -zarvh $TEMP/* $CUSTOM
+                echo $TEMP AND $CUSTOM
             fi;;
     esac
 
@@ -151,12 +152,24 @@ restoreFunction () {
 # Used when the user wants to restore a backup to a remote server. In this case, the contents of "filedir24" should have user@ip.
 
 remoterestoreFunction () {
+    clear
     tar -xpf $SDIR -C $TEMP
     cd $TEMP
     RSTRSSH=$(cat filedir24)
-    rm filedir24
-    rsync -zarvh $TEMP/* $RSTRSSH
-
+    echo "Press 1 to restore to $RSTRSSH or 2 to restore to custom Directory"
+    read -p "1 or 2 & ENTER>> " RESTORE
+    case $RESTORE in
+        1 ) echo "Restoring to $RSTRSSH"
+            rm filedir24
+            rsync -zarvh $TEMP/* $RSTRSSH;;
+        2 ) echo "Enter usr@server destination: "
+            read -p "Server>> " SERVER
+            echo "Enter Remote Directory"
+            read -p "Remote Directory>> " RMDIR
+                rm filedir24
+                rsync -zarvh $TEMP/* $SERVER:$RMDIR;;
+    esac
+    
 }
 
 
