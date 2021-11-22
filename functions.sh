@@ -49,7 +49,7 @@ if [[ -z $ARCHSRC ]]; then
 elif [[ ! -d $ARCHSRC ]]; then
     echo "$ARCHSRC doesn't exist" && exit 1
 else
-    tar -cvzf $archive -C $ARCHSRC . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
+    tar -cpzf $archive -C $ARCHSRC . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
 fi
 
 
