@@ -146,6 +146,7 @@ fi
 
 if [[ $FLAG_RS  ]]; then
     remoterestoreFunction
+    rm -rf $TEMP/*
 fi
 
 
