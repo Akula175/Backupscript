@@ -7,7 +7,6 @@
 ###################
 
 
-
 helpFunction () {
 ## Opens a help menu if no argument is given to the script or-
 # if the -h / --help flag is set.
@@ -15,15 +14,16 @@ helpFunction () {
     printf "Usage:\n\n $SCRIPTNAME [options] file\n $SCRIPTNAME [options]\n\n"
     printf \
     "Options: \n\
-    -h  --help                                     Shows this help
-    -e  --encrypt      <directory>                 Encrypts the file\n\n\
-    -d  --decrypt                                  Opens a prompt where user can enter the Directory where encrypted file is located\n\
-    -r  --restore      <file>                      Restores files based on first arg w/o arg user gets promopted\n\n\
+    -h  --help                                     Shows this help\n
+    -l  --local        <directory>                 Starts the backup process with tar locally
     -s  --ssh          <usr@server>:<directory>    Starts the rsync process for backing up remote files\n\
-    -l  --local        <directory>                 Starts the backup process with tar locally\n\n
-    -c  --cron                                     Opens prompt for scheduled backups
-    -rs --restore-ssh  <file>                      Restores a file to a remote server. User enters remote server and directory through prompt\n\n
-    -ss --ssh-sudo     <usr@server>:<directory>    Starts rsync process with sudo privileges, needs rsync in sudoers file on server\n\n"
+    -ss --ssh-sudo     <usr@server>:<directory>    Starts rsync process with sudo privileges, needs rsync in sudoers file on server\n
+    -e  --encrypt      <directory>                 Encrypts the file
+    -d  --decrypt                                  Opens a prompt where user can enter the Directory where encrypted file is located\n
+    -r  --restore      <file>                      Restores files based on first arg w/o arg user gets promopted
+    -rs --restore-ssh  <file>                      Restores a file to a remote server. User enters remote server and directory through prompt\n
+    -c  --cron                                     Opens prompt for scheduled backups\n\n"
+
 }
 
 
