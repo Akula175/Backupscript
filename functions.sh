@@ -74,18 +74,15 @@ encryptFunction () {
 decryptFunction () {
 ### Checks if the "-d" flag is used. This is for decryption of a encrypted file
 
-if [[ $FLAG_D ]]; then
-
 DIR_QUESTION=0
 FILE_QUESTION=0
-
     while [[ $DIR_QUESTION -lt 1 ]]
     do
-    echo -e "\nChoose the directory that containts the files you want to decrypt:"
-    read -p "Directory>>  " DDIR
-        if [[ -d $DDIR ]]; then
-            cd $DDIR
-            ENC_FILES=$(ls -A1 | grep -i .*enc)
+        echo -e "\nChoose the directory that containts the files you want to decrypt:"
+        read -p "Directory>>  " DDIR
+            if [[ -d $DDIR ]]; then
+                cd $DDIR
+                ENC_FILES=$(ls -A1 | grep -i .*enc)
 
                 if [[  -z $ENC_FILES ]]; then
                    echo -e "There are no encrypted files in this directory\nChoose another directory\n"
@@ -109,14 +106,9 @@ FILE_QUESTION=0
         else
             echo -e "\n$DDIR Is not a directory or it doesn't exist', try again"
         fi
-
     done
 
-
-fi
-
 }
-
 
 
 # Restore function
