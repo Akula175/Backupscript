@@ -107,7 +107,9 @@ fi
 
 if [[ $FLAG_L || $FLAG_E ]]; then
     if [[ -z $2 ]]; then
+        echo $SDIR > $SDIR/./filedir24
         tarFunction $SDIR    # Runs tarFunction with the source path from the $SDIR variable.
+        rm $SDIR/./filedir24
     fi
 fi
 
@@ -119,7 +121,9 @@ fi
 
 
 ## Activates decryption if "-d" flag is set.
-decryptFunction
+if [[ $FLAG_D ]]; then
+  decryptFunction
+fi
 
 
 # Activates Cron scheduling if "-c" flag is set.
@@ -133,6 +137,7 @@ fi
 if [[ $FLAG_S ]]; then
     echo "Entered IP address, starting scp"
     rsync -zarvh -e "ssh -i $KEY" $SSH:$SDIR $TEMP
+    echo $SSH:$SDIR > $TEMP/./filedir24
     tarFunction $TEMP           # Runs tarFunction with the source path from the $TEMP variable.
     rm -rf $TEMP/*
 fi
@@ -148,7 +153,7 @@ if [[ $FLAG_SS ]]; then
 fi
 
 
-# Restore prompt
+# Activates restore if the "-r" flag is set.
 
 if [[ $FLAG_R ]]; then
    if [[ ! -e "$SDIR" ]]; then
@@ -158,5 +163,13 @@ if [[ $FLAG_R ]]; then
         rm -rf $TEMP/*
     fi
 fi
+
+
+# Activates remote restore if "-rs" flag is set.
+
+if [[ $FLAG_RS  ]]; then
+    remoterestoreFunction
+fi
+
 
 echo "Finished in $SECONDS seconds"
