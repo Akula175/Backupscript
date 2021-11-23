@@ -125,7 +125,7 @@ restoreFunction () {
     cd $TEMP
     RSTR=$(cat filedir24)
     echo "Press 1 to restore to $RSTR or 2 to restore to custom Directory"
-    read -p "1 or 2 & ENTER>> " -n 1
+    read -p "1 or 2>> " -n 1
     case $REPLY in
         1 ) echo "Restoring to $RSTR"
             rm filedir24
@@ -153,7 +153,7 @@ remoterestoreFunction () {
     cd $TEMP
     RSTRSSH=$(cat filedir24)
     echo -e "Press 1 to restore to $RSTRSSH or 2 to restore to custom Directory"
-    read -p "1 or 2 & ENTER>> " -n 1
+    read -p "1 or 2>> " -n 1
     case $REPLY in
         1 ) echo "Restoring to $RSTRSSH"
             rm filedir24
