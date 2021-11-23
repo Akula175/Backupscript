@@ -18,7 +18,7 @@ helpFunction () {
     -l  --local        <directory>                 Starts the backup process with tar locally
     -s  --ssh          <usr@server>:<directory>    Starts the rsync process for backing up remote files\n\
     -ss --ssh-sudo     <usr@server>:<directory>    Starts rsync process with sudo privileges, needs rsync in sudoers file on server\n
-    -e  --encrypt      <directory>                 Encrypts the file
+    -e  --encrypt      <directory>                 Encrypts the Directory
     -d  --decrypt                                  Opens a prompt where user can enter the Directory where encrypted file is located\n
     -r  --restore      <file>                      Restores files based on first arg w/o arg user gets promopted
     -rs --restore-ssh  <file>                      Restores a file to a remote server. User enters remote server and directory through prompt\n
