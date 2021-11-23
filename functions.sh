@@ -34,7 +34,7 @@ tarFunction() {
 # archive == the archived and compressed file will be placed in this directory.
 
 ARCHSRC=$1    # Adds the source directory used to create the archive.
-fileName="$LDIR"/$HOSTNAME'_'$(date +'(%Y-%m-%d)_') # Saves the archive in this directory with the format Hostname_(year_month_day)-hour-minute.tar.gz
+fileName="$LDIR"/$HOSTNAME'_'$(date +'(%Y-%m-%d)_') # Saves the archive in this directory with the format Hostname_(year_month_day).tar.gz
 number=1
 archive=$fileName'001'.tar.gz
 while [ -e "$archive" ]; do
