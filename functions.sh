@@ -195,14 +195,14 @@ cronFuntion () {
         read -p "Crontime>> " -n 1
             case $REPLY in
                 l | L)
-                    CRONDIR="$PWD/main.sh --local"
+                    CRONDIR="$PWD/$(basename $0) --local"
                     echo -e "\nEnter Local Directory to backup: "
                     read -p "Directory>> " CRONDIR2
                     LOCAL_CRON=1
 
                 ;;
                 r | R)
-                   CRONDIR="$PWD/main.sh --ssh"
+                   CRONDIR="$PWD/$(basename $0) --ssh"
                    echo -e "\nEnter USR@IP followed by Remote Directory"
                    read -p "USR@IP & Directory>> " CRONDIR2
                    LOCAL_CRON=1

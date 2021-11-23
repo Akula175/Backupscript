@@ -135,9 +135,12 @@ fi
 
 # Creates backup with rsync through ssh.
 if [[ $FLAG_S ]]; then
-    echo "Entered IP address, starting scp"
+    echo "Entered IP address, starting rsync"
     HOSTNAME=$(ssh -i $KEY $SSH echo '$HOSTNAME')
-    rsync -zarvh -e "ssh -i $KEY" $SSH:$SDIR $TEMP
+    rsync -zarvh -e "ssh -i $KEY" $SSH:$SDIR $TEMP 2>/dev/null
+    if [ "$?" -ne 0 ]; then
+        echo -e "\nRsync failed, check input Directory" && exit 1
+    fi
     echo $SSH:$SDIR > $TEMP/./filedir24
     tarFunction $TEMP           # Runs tarFunction with the source path from the $TEMP variable.
     rm -rf $TEMP/*
@@ -147,8 +150,12 @@ fi
 # Creates backup with rsync through ssh.
 # Tries to run rsync with sudo privileges on the remote host.
 if [[ $FLAG_SS ]]; then
-    echo "Entered IP address, starting scp"
-    rsync -zarvh -e "ssh -i $KEY" $SSH:$SDIR $TEMP --rsync-path="sudo rsync"
+    echo "Entered IP address, starting rsync"
+    HOSTNAME=$(ssh -i $KEY $SSH echo '$HOSTNAME')
+    rsync -zarh -e "ssh -i $KEY" $SSH:$SDIR $TEMP --rsync-path="sudo rsync" 2>/dev/null
+    if [ "$?" -ne 0 ]; then
+        echo -e "\nRsync failed, rsync not in sudoers file, exiting" && exit 1
+    fi
     tarFunction $TEMP           # Runs tarFunction with the source path from the $TEMP variable.
     rm -rf $TEMP/*
 fi
