@@ -1,11 +1,11 @@
 #!/bin/bash
 
-WORKINGDIR=$(pwd)                # Variable for import of functions
+WORKINGDIR=$(pwd)                # Variable for import of functions. This is where the script is located
 
 source $WORKINGDIR/functions.sh  # Imports the functions file
 
 LDIR=$HOME/backup            # Variable for local backup folder. Change this if you want the backup to save in a different location
-KEY=~/.ssh/mypubkey.pub      # Variable for Key. Change this if your ssh key is in a different location
+KEY=~/.ssh/myprivkey         # Variable for Key. Change this if your ssh key is in a different location
 TEMP=/tmp/temp               # Variable for TEMP location
 
 
@@ -43,14 +43,32 @@ do
             fi
             FLAG_R=$1
             ;;
-        --ssh | -s)             # Activates SSH function, uses $KEY for public key and copy files remotely with rsync.
-            if [[ "$2" ]]; then
+        --restore-ssh | -rs)   # Activates restore remote function.
+            if [[ $2 ]]; then
+                SDIR=$2
+            fi
+            FLAG_RS=$1
+            ;;
+        --ssh | -s)            # Activates SSH function, uses $KEY for public key and copy files remotely with rsync.
+            if [[ ${2} =~ [a-z]@[0-9] ]]; then
                 SSH=$2
                 if [[ "$3" ]]; then
                     SDIR=$3
+                    FLAG_S=$1
+                fi
+            else
+                echo -e "\n$2 is not valid, please use the syntax username@ipadress\n\n"
+                exit 1
+            fi      
+            ;;
+        --ssh-sudo | -ss)       # Runs rsync as sudo over SSH. Requires that rsync is able to run as sudo without password on the remote host.
+            if [[ $2 ]]; then
+                SSH=$2
+                if [[ $3 ]]; then
+                    SDIR=$3
                 fi
             fi
-            FLAG_S=$1
+            FLAG_SS=$1
             ;;
         --local | -l)           # Used for local backup, requires the backup directory to be specified.
             if [[ "$2" ]]; then
@@ -89,7 +107,9 @@ fi
 
 if [[ $FLAG_L || $FLAG_E ]]; then
     if [[ -z $2 ]]; then
+        echo $SDIR > $SDIR/./filedir24
         tarFunction $SDIR    # Runs tarFunction with the source path from the $SDIR variable.
+        rm $SDIR/./filedir24
     fi
 fi
 
@@ -101,7 +121,9 @@ fi
 
 
 ## Activates decryption if "-d" flag is set.
-decryptFunction
+if [[ $FLAG_D ]]; then
+  decryptFunction
+fi
 
 
 # Activates Cron scheduling if "-c" flag is set.
@@ -110,19 +132,29 @@ if [[ $FLAG_C ]]; then
 fi
 
 
-# Checks if input is an IP addr
-# If valid IP, begins scp or Rsync
 
-
-if [[ $SSH =~ [a-z]@[0-9] ]]; then
+# Creates backup with rsync through ssh.
+if [[ $FLAG_S ]]; then
     echo "Entered IP address, starting scp"
+    HOSTNAME=$(ssh -i $KEY $SSH echo '$HOSTNAME')
     rsync -zarvh -e "ssh -i $KEY" $SSH:$SDIR $TEMP
+    echo $SSH:$SDIR > $TEMP/./filedir24
     tarFunction $TEMP           # Runs tarFunction with the source path from the $TEMP variable.
     rm -rf $TEMP/*
 fi
 
 
-# Restore prompt
+# Creates backup with rsync through ssh.
+# Tries to run rsync with sudo privileges on the remote host.
+if [[ $FLAG_SS ]]; then
+    echo "Entered IP address, starting scp"
+    rsync -zarvh -e "ssh -i $KEY" $SSH:$SDIR $TEMP --rsync-path="sudo rsync"
+    tarFunction $TEMP           # Runs tarFunction with the source path from the $TEMP variable.
+    rm -rf $TEMP/*
+fi
+
+
+# Activates restore if the "-r" flag is set.
 
 if [[ $FLAG_R ]]; then
    if [[ ! -e "$SDIR" ]]; then
@@ -132,5 +164,14 @@ if [[ $FLAG_R ]]; then
         rm -rf $TEMP/*
     fi
 fi
+
+
+# Activates remote restore if "-rs" flag is set.
+
+if [[ $FLAG_RS  ]]; then
+    remoterestoreFunction
+    rm -rf $TEMP/*
+fi
+
 
 echo "Finished in $SECONDS seconds"
