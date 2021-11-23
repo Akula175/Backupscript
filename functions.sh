@@ -172,7 +172,7 @@ remoterestoreFunction () {
 # Cronfuntion for cronjob scheduling.
 # Reads input from user and echoes the input to Cron via temporary file.
 
-cronFuntion () {
+cronFunction () {
   MYCRON=/tmp/temp/mycron
   crontab -l > $MYCRON
   DATE_CRON=0

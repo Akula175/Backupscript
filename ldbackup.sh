@@ -76,7 +76,7 @@ do
             fi
             FLAG_L=$1
             ;;
-        --cron | -c)
+        --cron | -c)           # Used for Cronscheduling. Starts a prompt where user enters desired Cron variables.
             FLAG_C=$1
             ;;
     esac
@@ -128,7 +128,7 @@ fi
 
 # Activates Cron scheduling if "-c" flag is set.
 if [[ $FLAG_C ]]; then
-  cronFuntion
+  cronFunction
 fi
 
 
@@ -147,7 +147,7 @@ if [[ $FLAG_S ]]; then
 fi
 
 
-# Creates backup with rsync through ssh.
+# Creates backup with rsync through ssh with Sudo Privileges.
 # Tries to run rsync with sudo privileges on the remote host.
 if [[ $FLAG_SS ]]; then
     echo "Entered IP address, starting rsync"
