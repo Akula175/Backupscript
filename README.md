@@ -8,7 +8,7 @@ We bear no responsibility for your system, whatsoever.
 
 Don't sue us. Please.
 
-© 2021 MT Corp.
+© 2021, Team 3
 
 
 
