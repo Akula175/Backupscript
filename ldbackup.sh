@@ -5,7 +5,7 @@ WORKINGDIR=$(pwd)                # Variable for import of functions. This is whe
 source $WORKINGDIR/functions.sh  # Imports the functions file
 
 LDIR=$HOME/backup            # Variable for local backup folder. Change this if you want the backup to save in a different location
-KEY=~/.ssh/mypubkey.pub      # Variable for Key. Change this if your ssh key is in a different location
+KEY=~/.ssh/myprivkey         # Variable for Key. Change this if your ssh key is in a different location
 TEMP=/tmp/temp               # Variable for TEMP location
 
 
@@ -43,14 +43,32 @@ do
             fi
             FLAG_R=$1
             ;;
-        --ssh | -s)             # Activates SSH function, uses $KEY for public key and copy files remotely with rsync.
-            if [[ "$2" ]]; then
+        --restore-ssh | -rs)   # Activates restore remote function.
+            if [[ $2 ]]; then
+                SDIR=$2
+            fi
+            FLAG_RS=$1
+            ;;
+        --ssh | -s)            # Activates SSH function, uses $KEY for public key and copy files remotely with rsync.
+            if [[ ${2} =~ [a-z]@[0-9] ]]; then
                 SSH=$2
                 if [[ "$3" ]]; then
                     SDIR=$3
+                    FLAG_S=$1
+                fi
+            else
+                echo -e "\n$2 is not valid, please use the syntax username@ipadress\n\n"
+                exit 1
+            fi      
+            ;;
+        --ssh-sudo | -ss)       # Runs rsync as sudo over SSH. Requires that rsync is able to run as sudo without password on the remote host.
+            if [[ $2 ]]; then
+                SSH=$2
+                if [[ $3 ]]; then
+                    SDIR=$3
                 fi
             fi
-            FLAG_S=$1
+            FLAG_SS=$1
             ;;
         --local | -l)           # Used for local backup, requires the backup directory to be specified.
             if [[ "$2" ]]; then
@@ -58,14 +76,9 @@ do
             fi
             FLAG_L=$1
             ;;
-        --cron | -c)            # Used to schedule backups with cron
+        --cron | -c)           # Used for Cronscheduling. Starts a prompt where user enters desired Cron variables.
             FLAG_C=$1
             ;;
-        --rremote | -rs)        # Used to restore backup to a remote server via ssh
-            if [[ $2 ]]; then
-                SDIR=$2
-            fi
-            FLAG_RS=$1
     esac
     shift
 done
@@ -108,23 +121,41 @@ fi
 
 
 ## Activates decryption if "-d" flag is set.
-decryptFunction
+if [[ $FLAG_D ]]; then
+  decryptFunction
+fi
 
 
 # Activates Cron scheduling if "-c" flag is set.
 if [[ $FLAG_C ]]; then
-  cronFuntion
+  cronFunction
 fi
 
 
-# Checks if input is an IP addr
-# If valid IP, begins scp or Rsync
 
-
-if [[ $SSH =~ [a-z]@[0-9] ]]; then
-    echo "Entered IP address, starting scp"
-    rsync -zarvh -e "ssh -i $KEY" $SSH:$SDIR $TEMP
+# Creates backup with rsync through ssh.
+if [[ $FLAG_S ]]; then
+    echo "Entered IP address, starting rsync"
+    HOSTNAME=$(ssh -i $KEY $SSH echo '$HOSTNAME')
+    rsync -zarvh -e "ssh -i $KEY" $SSH:$SDIR $TEMP 2>/dev/null
+    if [ "$?" -ne 0 ]; then
+        echo -e "\nRsync failed, check input Directory" && exit 1
+    fi
     echo $SSH:$SDIR > $TEMP/./filedir24
+    tarFunction $TEMP           # Runs tarFunction with the source path from the $TEMP variable.
+    rm -rf $TEMP/*
+fi
+
+
+# Creates backup with rsync through ssh with Sudo Privileges.
+# Tries to run rsync with sudo privileges on the remote host.
+if [[ $FLAG_SS ]]; then
+    echo "Entered IP address, starting rsync"
+    HOSTNAME=$(ssh -i $KEY $SSH echo '$HOSTNAME')
+    rsync -zarh -e "ssh -i $KEY" $SSH:$SDIR $TEMP --rsync-path="sudo rsync" 2>/dev/null
+    if [ "$?" -ne 0 ]; then
+        echo -e "\nRsync failed, rsync not in sudoers file, exiting" && exit 1
+    fi
     tarFunction $TEMP           # Runs tarFunction with the source path from the $TEMP variable.
     rm -rf $TEMP/*
 fi
@@ -146,6 +177,7 @@ fi
 
 if [[ $FLAG_RS  ]]; then
     remoterestoreFunction
+    rm -rf $TEMP/*
 fi
 
 
