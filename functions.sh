@@ -232,6 +232,6 @@ mysqlFunction () {
 
 HOSTNAME="$MYSQLDATA"
 
-mysqldump -u $MYSQLUSER -p $MYSQLDATA > $MYSQLFILE
+mysqldump -u $MYSQLUSER $MYSQLDATA > $MYSQLFILE
 
 }
