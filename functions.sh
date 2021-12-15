@@ -225,3 +225,13 @@ cronFunction () {
   rm $MYCRON
 
   }
+
+
+
+mysqlFunction () {
+
+HOSTNAME="MysqlDatabase"
+
+sudo mysqldump -u $MYSQLUSER -p $MYSQLPASS --all-databases > $MYSQLFILE
+
+}

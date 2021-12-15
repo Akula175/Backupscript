@@ -7,7 +7,9 @@ source $WORKINGDIR/functions.sh  # Imports the functions file
 LDIR=$HOME/backup            # Variable for local backup folder. Change this if you want the backup to save in a different location
 KEY=~/.ssh/myprivkey         # Variable for Key. Change this if your ssh key is in a different location
 TEMP=/tmp/temp               # Variable for TEMP location
-
+MYSQLUSER="nextcloud_user"
+MYSQLPASS="dt"
+MYSQLFILE=$TEMP/all-database.sql
 
 # Checks if user input contains any arguments, if not, a help menu is presented.
 # Help menu is stored in the *helpFunction*
@@ -79,6 +81,9 @@ do
         --cron | -c)           # Used for Cronscheduling. Starts a prompt where user enters desired Cron variables.
             FLAG_C=$1
             ;;
+        --mysql | -m)
+            FLAG_M=$1
+            ;;
     esac
     shift
 done
@@ -131,6 +136,13 @@ if [[ $FLAG_C ]]; then
   cronFunction
 fi
 
+
+## Activates Mysql backup propmt
+if [[ $FLAG_M ]]; then
+    mysqlFunction
+    tarFunction $TEMP
+    rm -rf $TEMP/*
+fi
 
 
 # Creates backup with rsync through ssh.
