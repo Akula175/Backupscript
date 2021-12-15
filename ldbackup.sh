@@ -9,7 +9,7 @@ KEY=~/.ssh/myprivkey         # Variable for Key. Change this if your ssh key is 
 TEMP=/tmp/temp               # Variable for TEMP location
 MYSQLUSER="nextcloud_user"
 MYSQLDATA="nextcloud_db"
-MYSQLFILE=$TEMP/all-database.sql
+MYSQLFILE=$TEMP/$MYSQLDATA.sql
 
 # Checks if user input contains any arguments, if not, a help menu is presented.
 # Help menu is stored in the *helpFunction*

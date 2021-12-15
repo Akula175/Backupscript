@@ -230,7 +230,7 @@ cronFunction () {
 
 mysqlFunction () {
 
-HOSTNAME="MysqlDatabase"
+HOSTNAME="$MYSQLDATA"
 
 mysqldump -u $MYSQLUSER -p $MYSQLDATA > $MYSQLFILE
 
