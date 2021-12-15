@@ -7,7 +7,6 @@
 ###################
 
 
-
 helpFunction () {
 ## Opens a help menu if no argument is given to the script or-
 # if the -h / --help flag is set.
@@ -15,12 +14,16 @@ helpFunction () {
     printf "Usage:\n\n $SCRIPTNAME [options] file\n $SCRIPTNAME [options]\n\n"
     printf \
     "Options: \n\
-    -h  --help     <file>         Shows this help
-    -e  --encrypt  <file>         Encrypts the file\n\n\
-    -d  --decrypt  <file>         Decrypts a file based on first arg w/o arg user gets promopted\n\
-    -r  --restore  <file>         Restores files based on first arg w/o arg user gets promopted\n\n\
-    -s --ssh       <usr@server>   Starts the rsync process for backing up remote files\n\
-    -l --local     <file>         Starts the backup process with tar locally\n\n"
+    -h  --help                                     Shows this help\n
+    -l  --local        <directory>                 Starts the backup process with tar locally
+    -s  --ssh          <usr@server>:<directory>    Starts the rsync process for backing up remote files\n\
+    -ss --ssh-sudo     <usr@server>:<directory>    Starts rsync process with sudo privileges, needs rsync in sudoers file on server\n
+    -e  --encrypt      <directory>                 Encrypts the Directory
+    -d  --decrypt                                  Opens a prompt where user can enter the Directory where encrypted file is located\n
+    -r  --restore      <file>                      Restores files based on first arg w/o arg user gets promopted
+    -rs --restore-ssh  <file>                      Restores a file to a remote server. User enters remote server and directory through prompt\n
+    -c  --cron                                     Opens prompt for scheduled backups\n\n"
+
 }
 
 
@@ -30,29 +33,33 @@ tarFunction() {
 # Uses the first argument added to the function in the main script as source directory.
 # archive == the archived and compressed file will be placed in this directory.
 
-    ARCHSRC=$1    # Adds the source directory used to create the archive.
-    archive="$LDIR"/$HOSTNAME'_'$(date +'(%Y-%m-%d)'"-%H")'.tar.gz' # Saves the archive in this directory with the format Hostname_(year_month_day)-hour.tar.gz
-    #archive="$LDIR"/$HOSTNAME'_'$(date +"%Y-%m-%d")'.tar.gz'
+ARCHSRC=$1    # Adds the source directory used to create the archive.
+fileName="$LDIR"/$HOSTNAME'_'$(date +'(%Y-%m-%d)_') # Saves the archive in this directory with the format Hostname_(year_month_day).tar.gz
+number=1
+archive=$fileName'001'.tar.gz
+while [ -e "$archive" ]; do
+    printf -v archive '%s%03d.tar.gz' "$fileName" "$(( ++number ))"   
+done
+    
+## Check if the source directory exist otherwise exit.
+## if the source directory exist, create the archive.
 
-    ## Check if the source directory exist otherwise exit.
-    ## if the source directory exist, create the archive.
-
-    if [[ -z $ARCHSRC ]]; then
-        echo "Source directory is empty" && exit 1
-    elif [[ ! -d $ARCHSRC ]]; then
-        echo "$ARCHSRC doesn't exist" && exit 1
-    else
-        tar -cvzf $archive -C $ARCHSRC . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
-    fi
+if [[ -z $ARCHSRC ]]; then
+    echo "Source directory is empty" && exit 1
+elif [[ ! -d $ARCHSRC ]]; then
+    echo "$ARCHSRC doesn't exist" && exit 1
+else
+    tar -cpzf $archive -C $ARCHSRC . >/dev/null 2>&1 && (command sha512sum $archive > $archive.CHECKSUM)
+fi
 
 
-    ## Check if CHECKSUM is correct
+## Check if CHECKSUM is correct
 
-    if [[ -f $archive.CHECKSUM ]]; then
-        command sha512sum -c $archive.CHECKSUM >/dev/null 2>&1 && echo success || echo failed
-    else
-        echo "The archive file and checksum file doesn't match" && exit 1
-    fi
+if [[ -f $archive.CHECKSUM ]]; then
+    command sha512sum -c $archive.CHECKSUM >/dev/null 2>&1 && echo success || echo failed
+else
+    echo "The archive file and checksum file doesn't match" && exit 1
+fi
 
 }
 
@@ -71,26 +78,23 @@ encryptFunction () {
 decryptFunction () {
 ### Checks if the "-d" flag is used. This is for decryption of a encrypted file
 
-if [[ $FLAG_D ]]; then
-
 DIR_QUESTION=0
 FILE_QUESTION=0
-
     while [[ $DIR_QUESTION -lt 1 ]]
     do
-    echo -e "\nChoose the directory that containts the files you want to encrypt:"
-    read -p "Directory>>  " DDIR
-        if [[ -d $DDIR ]]; then
-            cd $DDIR
-            ENC_FILES=$(ls -A1 | grep -i .*enc)
+        echo -e "\nChoose the directory that containts the files you want to decrypt:"
+        read -p "Directory>>  " DDIR
+            if [[ -d $DDIR ]]; then
+                cd $DDIR
+                ENC_FILES=$(ls -A1 | grep -i .*enc)
 
                 if [[  -z $ENC_FILES ]]; then
-                   echo -e "There is no encrypted files in this directory\nChoose another directory\n"
+                   echo -e "There are no encrypted files in this directory\nChoose another directory\n"
                 else
                     DIR_QUESTION=1
                     while [[ $FILE_QUESTION -lt 1 ]]
                     do
-                        echo -e "\nWhich of these files do you want to encrypt?: "
+                        echo -e "\nWhich of these files do you want to decrypt?: "
                         echo -e "$ENC_FILES\n"
                         read -p "File>> " LINE
                             if [[ $LINE == *.enc ]]; then
@@ -106,14 +110,9 @@ FILE_QUESTION=0
         else
             echo -e "\n$DDIR Is not a directory or it doesn't exist', try again"
         fi
-
     done
 
-
-fi
-
 }
-
 
 
 # Restore function
@@ -126,18 +125,19 @@ restoreFunction () {
     cd $TEMP
     RSTR=$(cat filedir24)
     echo "Press 1 to restore to $RSTR or 2 to restore to custom Directory"
-    read -p "1 or 2 & ENTER>> " RESTORE
-    case $RESTORE in
+    read -p "1 or 2>> " -n 1
+    case $REPLY in
         1 ) echo "Restoring to $RSTR"
             rm filedir24
-            rsync -av $TEMP/* $RSTR;;
-        2 ) echo "Enter Directory to restore to: "
+            rsync -zarvh $TEMP/* $RSTR;;
+        2 ) echo -e "\nEnter Directory to restore to: "
             read -p "Directory>> " CUSTOM
             if [[ ! -d $CUSTOM ]]; then
                 echo "Input Directory is not valid, please try again." && exit 1
             else
                 rm filedir24
-                rsync -av $TEMP/* $CUSTOM
+                rsync -zarvh $TEMP/* $CUSTOM
+                echo $TEMP AND $CUSTOM
             fi;;
     esac
 
@@ -148,19 +148,31 @@ restoreFunction () {
 # Used when the user wants to restore a backup to a remote server. In this case, the contents of "filedir24" should have user@ip.
 
 remoterestoreFunction () {
+    clear
     tar -xpf $SDIR -C $TEMP
     cd $TEMP
     RSTRSSH=$(cat filedir24)
-    rm filedir24
-    rsync -zarvh $TEMP/* $RSTRSSH
-
+    echo -e "Press 1 to restore to $RSTRSSH or 2 to restore to custom Directory"
+    read -p "1 or 2>> " -n 1
+    case $REPLY in
+        1 ) echo "Restoring to $RSTRSSH"
+            rm filedir24
+            rsync -zarvh -e "ssh -i $KEY" $TEMP/* $RSTRSSH;;
+        2 ) echo -e "\nEnter usr@server destination: "
+            read -p "Server>> " SERVER
+            echo -e "\nEnter Remote Directory"
+            read -p "Remote Directory>> " RMDIR
+                rm filedir24
+                rsync -zarvh -e "ssh -i $KEY" $TEMP/* $SERVER:$RMDIR;;
+    esac
+    
 }
 
 
 # Cronfuntion for cronjob scheduling.
 # Reads input from user and echoes the input to Cron via temporary file.
 
-cronFuntion () {
+cronFunction () {
   MYCRON=/tmp/temp/mycron
   crontab -l > $MYCRON
   DATE_CRON=0
@@ -183,12 +195,17 @@ cronFuntion () {
         read -p "Crontime>> " -n 1
             case $REPLY in
                 l | L)
-                    CRONDIR="$PWD/main.sh --local"
+                    CRONDIR="$PWD/$(basename $0) --local"
+                    echo -e "\nEnter Local Directory to backup: "
+                    read -p "Directory>> " CRONDIR2
                     LOCAL_CRON=1
+
                 ;;
                 r | R)
-                   CRONDIR="$PWD/main.sh --ssh"
-                    LOCAL_CRON=1
+                   CRONDIR="$PWD/$(basename $0) --ssh"
+                   echo -e "\nEnter USR@IP followed by Remote Directory"
+                   read -p "USR@IP & Directory>> " CRONDIR2
+                   LOCAL_CRON=1
                 ;;
                 *)
                    echo -e "\n$REPLY is not a valid answer, choose [L] or [R]"
@@ -197,13 +214,6 @@ cronFuntion () {
 
   done
 
-  while [[ $DIRECTION -eq 0 ]]
-  do
-    echo -e "\nInput Local Directory or USR@IP Directory for remote: "
-    read -p "Input & ENTER>> " CRONDIR2
-    DIRECTION=1
-
-done
 
 
   echo -e  "\nCronjob to be scheduled: $CRONSYN $CRONDIR $CRONDIR2"
