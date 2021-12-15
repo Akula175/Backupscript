@@ -232,6 +232,6 @@ mysqlFunction () {
 
 HOSTNAME="MysqlDatabase"
 
-sudo mysqldump -u $MYSQLUSER -p $MYSQLPASS --all-databases > $MYSQLFILE
+mysqldump -u $MYSQLUSER -p $MYSQLDATA > $MYSQLFILE
 
 }

@@ -8,7 +8,7 @@ LDIR=$HOME/backup            # Variable for local backup folder. Change this if 
 KEY=~/.ssh/myprivkey         # Variable for Key. Change this if your ssh key is in a different location
 TEMP=/tmp/temp               # Variable for TEMP location
 MYSQLUSER="nextcloud_user"
-MYSQLPASS="dt"
+MYSQLDATA="nextcloud_db"
 MYSQLFILE=$TEMP/all-database.sql
 
 # Checks if user input contains any arguments, if not, a help menu is presented.
