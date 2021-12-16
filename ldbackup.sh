@@ -84,6 +84,9 @@ do
         --mysql | -m)
             FLAG_M=$1
             ;;
+        --mytest)
+            FLAG_MT=$1
+            ;;
     esac
     shift
 done
@@ -135,6 +138,15 @@ fi
 if [[ $FLAG_C ]]; then
   cronFunction
 fi
+
+#####
+if [[ $FLAG_MT ]]; then
+    HOSTNAME=$3
+    mysqldump $3
+    tarFunction $TEMP
+    rm -r $TEMP/*
+fi
+
 
 
 ## Activates Mysql backup prompt
