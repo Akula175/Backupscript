@@ -86,6 +86,7 @@ do
             ;;
         --mytest)
             FLAG_MT=$1
+            SDB=$2
             ;;
     esac
     shift
@@ -141,10 +142,11 @@ fi
 
 #####
 if [[ $FLAG_MT ]]; then
-    HOSTNAME=$3
-    mysqldump -p $3 > $MYSQLFILE
+    HOSTNAME=$SDB
+    mysqldump -p $SDB > $MYSQLFILE
     tarFunction $TEMP
     rm -r $TEMP/*
+    echo $SDB
 fi
 
 
