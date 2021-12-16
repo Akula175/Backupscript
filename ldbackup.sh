@@ -140,8 +140,11 @@ fi
 
 #####
 if [[ $FLAG_MT ]]; then
-    mysqldump -p $SDB > $DF/$SDB.sql
-    echo $SDB $DF
+    mysqldump -p $SDB > $TEMP/$SDB.sql
+    HOSTNAME=$SDB
+    tarFunction $TEMP
+    rm -r $TEMP/*
+    echo $SDB
 fi
 
 
