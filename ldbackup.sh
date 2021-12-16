@@ -7,7 +7,6 @@ source $WORKINGDIR/functions.sh  # Imports the functions file
 LDIR=$HOME/backup            # Variable for local backup folder. Change this if you want the backup to save in a different location
 KEY=~/.ssh/myprivkey         # Variable for Key. Change this if your ssh key is in a different location
 TEMP=/tmp/temp               # Variable for TEMP location
-MYSQLFILE=$DF/$SDB.sql           #Variable for Filename of database backup
 
 # Checks if user input contains any arguments, if not, a help menu is presented.
 # Help menu is stored in the *helpFunction*
@@ -141,8 +140,8 @@ fi
 
 #####
 if [[ $FLAG_MT ]]; then
-    mysqldump -p $SDB > $DF/$MYSQLFILE
-    echo $SDB $DF $MYSQLFILE
+    mysqldump -p $SDB > $DF/$SDB.sql
+    echo $SDB $DF
 fi
 
 
