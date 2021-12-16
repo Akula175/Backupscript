@@ -7,9 +7,7 @@ source $WORKINGDIR/functions.sh  # Imports the functions file
 LDIR=$HOME/backup            # Variable for local backup folder. Change this if you want the backup to save in a different location
 KEY=~/.ssh/myprivkey         # Variable for Key. Change this if your ssh key is in a different location
 TEMP=/tmp/temp               # Variable for TEMP location
-MYSQLUSER="nextcloud_user"   # Variable for Database username
-MYSQLDATA="nextcloud_db"     # Variable for which database to backup
-MYSQLFILE=$TEMP/$MYSQLDATA.sql    #Variable for Filename of database backup
+MYSQLFILE=$TEMP/$SBD.sql    #Variable for Filename of database backup
 
 # Checks if user input contains any arguments, if not, a help menu is presented.
 # Help menu is stored in the *helpFunction*
