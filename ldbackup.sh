@@ -80,12 +80,14 @@ do
             ;;
         --mysql | -m)
             FLAG_M=$1
-            ;;
-        --mytest)
-            FLAG_MT=$1
             SDB=$2
             DF=$3
             ;;
+#        --mytest)
+#            FLAG_MT=$1
+#            SDB=$2
+#            DF=$3
+#            ;;
     esac
     shift
 done
@@ -138,8 +140,8 @@ if [[ $FLAG_C ]]; then
   cronFunction
 fi
 
-#####
-if [[ $FLAG_MT ]]; then
+# Activates Database backup if "-m" flag is set.
+if [[ $FLAG_M ]]; then
     mysqldump -p $SDB > $DF/$SDB.sql
     echo $SDB $DF
 fi
@@ -147,35 +149,35 @@ fi
 
 
 ## Activates Mysql backup prompt
-if [[ $FLAG_M ]]; then
-    if [[ ! -e $HOME/.my.cnf ]]; then
-        echo -e "\n.my.cnf file does not exist. Do you want to create one now?"
-        read -p "Y/N>>" -n 1
-        case $REPLY in
-            y | Y)
-                echo -e "\nEnter Username of Database user"
-                read -p "Database user>>" DBUSER
-                echo -e "\nEnter Password of Database user"
-                read -p "User Password>>" DBPASS
-
-                echo -e "[client] \nuser = $DBUSER \npassword = $DBPASS" >> $HOME/.my.cnf
-
-                HOSTNAME=$MYSQLDATA
-                mysqlFunction
-                tarFunction $TEMP
-                rm -rf $TEMP/*
-                ;;
-            n | N)
-                exit 1
-                ;;
-        esac
-    else
-
-        mysqlFunction
-        tarFunction $TEMP
-        rm -rf $TEMP/*
-    fi
-fi
+#if [[ $FLAG_M ]]; then
+#    if [[ ! -e $HOME/.my.cnf ]]; then
+#        echo -e "\n.my.cnf file does not exist. Do you want to create one now?"
+#        read -p "Y/N>>" -n 1
+#        case $REPLY in
+#            y | Y)
+#                echo -e "\nEnter Username of Database user"
+#                read -p "Database user>>" DBUSER
+#                echo -e "\nEnter Password of Database user"
+#                read -p "User Password>>" DBPASS
+#
+#                echo -e "[client] \nuser = $DBUSER \npassword = $DBPASS" >> $HOME/.my.cnf
+#
+#                HOSTNAME=$MYSQLDATA
+#                mysqlFunction
+#                tarFunction $TEMP
+#                rm -rf $TEMP/*
+#                ;;
+#            n | N)
+#                exit 1
+#                ;;
+#        esac
+#    else
+#
+#        mysqlFunction
+#        tarFunction $TEMP
+#        rm -rf $TEMP/*
+#    fi
+#fi
 
 
 # Creates backup with rsync through ssh.
