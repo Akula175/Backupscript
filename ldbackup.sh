@@ -141,7 +141,7 @@ fi
 if [[ $FLAG_M ]]; then
     if [[ ! -e $HOME/.my.cnf ]]; then
         echo -e "\n.my.cnf file does not exist. Do you want to create one now?"
-        read -p "Yes//No>>" -n 1
+        read -p "Y/N>>" -n 1
         case $REPLY in
             y | Y)
                 echo -e "\nEnter Username of Database user"
