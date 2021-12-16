@@ -139,9 +139,32 @@ fi
 
 ## Activates Mysql backup propmt
 if [[ $FLAG_M ]]; then
-    mysqlFunction
-    tarFunction $TEMP
-    rm -rf $TEMP/*
+    if [[ ! -e $HOME/.my.cnf ]]; then
+        echo -e "\n.my.cnf file does not exist. Do you want to create one now?"
+        read -p "Yes//No>>" -n 1
+        case $REPLY in
+            y | Y)
+                echo -e "\nEnter Username of Database user"
+                read -p "Database user>>" DBUSER
+                echo -e "\nEnter Password of Database user"
+                read -p "User Password>>" DBPASS
+
+                echo -e "[client] \nuser = $DBUSER \npassword = $DBPASS" >> $HOME/.my.cnf
+
+                mysqlFunction
+                tarFunction $TEMP
+                rm -rf $TEMP/*
+                ;;
+            n | N)
+                exit 1
+                ;;
+        esac
+    else
+
+        mysqlFunction
+        tarFunction $TEMP
+        rm -rf $TEMP/*
+    fi
 fi
 
 
