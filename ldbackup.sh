@@ -137,7 +137,7 @@ if [[ $FLAG_C ]]; then
 fi
 
 
-## Activates Mysql backup propmt
+## Activates Mysql backup prompt
 if [[ $FLAG_M ]]; then
     if [[ ! -e $HOME/.my.cnf ]]; then
         echo -e "\n.my.cnf file does not exist. Do you want to create one now?"
@@ -151,6 +151,7 @@ if [[ $FLAG_M ]]; then
 
                 echo -e "[client] \nuser = $DBUSER \npassword = $DBPASS" >> $HOME/.my.cnf
 
+                HOSTNAME=$MYSQLDATA
                 mysqlFunction
                 tarFunction $TEMP
                 rm -rf $TEMP/*
