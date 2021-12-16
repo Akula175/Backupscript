@@ -142,7 +142,7 @@ fi
 #####
 if [[ $FLAG_MT ]]; then
     HOSTNAME=$3
-    mysqldump $3
+    mysqldump -p $3 > $MYSQLFILE
     tarFunction $TEMP
     rm -r $TEMP/*
 fi
